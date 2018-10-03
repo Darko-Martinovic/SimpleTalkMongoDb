@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD25053E-BCFF-457C-B479-E63BB04A2202}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>SimpleTalkMongoDb</RootNamespace>
+    <AssemblyName>SimpleTalkMongoDb</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>SimpleTalkMongoDb.CRUD_operations.CrudDemo</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
+      <HintPath>..\packages\DnsClient.1.0.7\lib\net45\DnsClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Client, Version=7.5.1.20914, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Client.7.5.1\lib\net45\Microsoft.OData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Core, Version=7.5.1.20914, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Core.7.5.1\lib\portable-net45+win8+wpa81\Microsoft.OData.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.OData.Edm, Version=7.5.1.20914, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.OData.Edm.7.5.1\lib\portable-net45+win8+wpa81\Microsoft.OData.Edm.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Spatial, Version=7.5.1.20914, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Spatial.7.5.1\lib\portable-net45+win8+wpa81\Microsoft.Spatial.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Bson.2.7.0\lib\net45\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.2.7.0\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MongoDB.Driver.Core.2.7.0\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.3.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregation\AggregationSales.cs" />
+    <Compile Include="Aggregation\SampleLookup.cs" />
+    <Compile Include="Authentication\Auth.cs" />
+    <Compile Include="Configuration\SampleConfig.cs" />
+    <Compile Include="CRUD operations\CrudDemo.cs" />
+    <Compile Include="Extension\ConsoleEx.cs" />
+    <Compile Include="Filtering\Explain.cs" />
+    <Compile Include="Filtering\FilterHeader.cs" />
+    <Compile Include="Filtering\FindWithCursor.cs" />
+    <Compile Include="Loaders\CreateJsonProducts.cs" />
+    <Compile Include="Loaders\CreateJsonSpetialOffer.cs" />
+    <Compile Include="Pocos\Person.cs" />
+    <Compile Include="Pocos\Product.cs" />
+    <Compile Include="Pocos\SpetialOffer.cs" />
+    <Compile Include="Pocos\TestSerializer.cs" />
+    <Compile Include="Pocos\TestTypes.cs" />
+    <Compile Include="Loaders\CreateJsonSales.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Pocos\SalesHeader.cs" />
+    <Compile Include="Serialization\AttributeDescoration.cs" />
+    <Compile Include="Serialization\ClassMapAutoMap.cs" />
+    <Compile Include="Serialization\ClassMap.cs" />
+    <Compile Include="Serialization\TestConventionPack.cs" />
+    <Compile Include="Serialization\TestTypes.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EmbeddedResource Include="Data\Sales.json" />
+    <EmbeddedResource Include="Data\MongoImport.cmd" />
+    <EmbeddedResource Include="Data\SpetailOffer.json" />
+    <EmbeddedResource Include="Data\Product.json" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Aggregation\AggregationUnwind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TSQL\QueryingHeader.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TSQL\QueryingDetail.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Authentication\AddUser.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

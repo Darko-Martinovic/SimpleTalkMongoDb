@@ -1,0 +1,81 @@
+[{
+		"_id" : 1,
+		"offerType" : "No Discount",
+		"category" : "No Discount",
+		"description" : "No Discount"
+	}, {
+		"_id" : 2,
+		"offerType" : "Volume Discount",
+		"category" : "Reseller",
+		"description" : "Volume Discount 11 to 14"
+	}, {
+		"_id" : 3,
+		"offerType" : "Volume Discount",
+		"category" : "Reseller",
+		"description" : "Volume Discount 15 to 24"
+	}, {
+		"_id" : 4,
+		"offerType" : "Volume Discount",
+		"category" : "Reseller",
+		"description" : "Volume Discount 25 to 40"
+	}, {
+		"_id" : 5,
+		"offerType" : "Volume Discount",
+		"category" : "Reseller",
+		"description" : "Volume Discount 41 to 60"
+	}, {
+		"_id" : 6,
+		"offerType" : "Volume Discount",
+		"category" : "Reseller",
+		"description" : "Volume Discount over 60"
+	}, {
+		"_id" : 7,
+		"offerType" : "Discontinued Product",
+		"category" : "Reseller",
+		"description" : "Mountain-100 Clearance Sale"
+	}, {
+		"_id" : 8,
+		"offerType" : "Seasonal Discount",
+		"category" : "Reseller",
+		"description" : "Sport Helmet Discount-2002"
+	}, {
+		"_id" : 9,
+		"offerType" : "Excess Inventory",
+		"category" : "Reseller",
+		"description" : "Road-650 Overstock"
+	}, {
+		"_id" : 10,
+		"offerType" : "Excess Inventory",
+		"category" : "Customer",
+		"description" : "Mountain Tire Sale"
+	}, {
+		"_id" : 11,
+		"offerType" : "Seasonal Discount",
+		"category" : "Reseller",
+		"description" : "Sport Helmet Discount-2003"
+	}, {
+		"_id" : 12,
+		"offerType" : "Excess Inventory",
+		"category" : "Reseller",
+		"description" : "LL Road Frame Sale"
+	}, {
+		"_id" : 13,
+		"offerType" : "New Product",
+		"category" : "Reseller",
+		"description" : "Touring-3000 Promotion"
+	}, {
+		"_id" : 14,
+		"offerType" : "New Product",
+		"category" : "Reseller",
+		"description" : "Touring-1000 Promotion"
+	}, {
+		"_id" : 15,
+		"offerType" : "Seasonal Discount",
+		"category" : "Customer",
+		"description" : "Half-Price Pedal Sale"
+	}, {
+		"_id" : 16,
+		"offerType" : "Discontinued Product",
+		"category" : "Reseller",
+		"description" : "Mountain-500 Silver Clearance Sale"
+	}]
