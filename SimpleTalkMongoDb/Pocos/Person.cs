@@ -16,7 +16,8 @@ namespace SimpleTalkMongoDb.Pocos
 
     }
 
-    public abstract class LookedUpPerson
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class LookedUpPerson
     {
 
         public ObjectId Id { get; set; }
