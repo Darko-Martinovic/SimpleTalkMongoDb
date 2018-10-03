@@ -26,4 +26,5 @@ namespace SimpleTalkMongoDb.Pocos
 
         public IEnumerable<NameMeaning> Meanings { get; set; }
     }
+   
 }

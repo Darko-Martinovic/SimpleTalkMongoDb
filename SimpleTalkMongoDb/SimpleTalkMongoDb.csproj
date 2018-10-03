@@ -41,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.Aggregation.AggregationUnwind</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Aggregation.SampleUnwind</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregation\AggregationSales.cs" />
+    <Compile Include="Aggregation\SampleUnwind.cs" />
     <Compile Include="Aggregation\SampleLookup.cs" />
     <Compile Include="Authentication\Auth.cs" />
     <Compile Include="Configuration\SampleConfig.cs" />

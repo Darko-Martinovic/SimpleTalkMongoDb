@@ -45,7 +45,7 @@ namespace SimpleTalkMongoDb.Configuration
 
         public static MongoClient Client { get; }
 
-        private static IMongoDatabase Db { get; set; }
+        public static IMongoDatabase Db { get; set; }
 
         public static IMongoDatabase DbSampleLookup { get; private set; }
 

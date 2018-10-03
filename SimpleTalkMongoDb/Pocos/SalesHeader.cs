@@ -85,7 +85,8 @@ namespace SimpleTalkMongoDb.Pocos
 
     }
 
-    public abstract class SalesDetailHelper
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public  class SalesDetailHelper
     {
 
         public SalesDetail Details { get; set; }
@@ -94,5 +95,13 @@ namespace SimpleTalkMongoDb.Pocos
 
     }
 
+    public class SalesDetailHelper2
+    {
+  
+        public int Id { get; set; }
+        public SalesDetail Details { get; set; }
 
+
+
+    }
 }
