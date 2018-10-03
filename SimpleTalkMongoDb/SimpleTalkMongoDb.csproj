@@ -133,5 +133,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Authentication\AddUser.js" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Aggregation\CreateIndex.js" />
+    <Content Include="Aggregation\Query.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -55,10 +55,12 @@ namespace SimpleTalkMongoDb.Aggregation
 
         private static async Task UsingMongoAggFramework(IMongoCollection<SalesHeader> collection, AggregateOptions aggregationOptions)
         {
-            var result = await collection.Aggregate(aggregationOptions)
+
+            // Let's aggregate
+            var query =  collection.Aggregate(aggregationOptions)
                 // First group by TerritoryId plus CustomerId
-                .Group(x => new { x.TerritoryId, x.CustomerId },
-                    g => new { TerritoryIdCustomerId = g.Key, TotalDue = g.Sum(x => x.TotalDue) })
+                .Group(x => new {x.TerritoryId, x.CustomerId},
+                    g => new {TerritoryIdCustomerId = g.Key, TotalDue = g.Sum(x => x.TotalDue)})
                 // Sort by TotalDue
                 .SortBy(x => x.TotalDue)
                 // Group again by TerritoryId in oder to find Last value per group
@@ -74,13 +76,15 @@ namespace SimpleTalkMongoDb.Aggregation
                 .Project(x => new
                 {
                     x.TerritoryId,
-                    MaxCust = new { Id = x.MaxCustomer, Total = x.MaxTotal },
+                    MaxCust = new {Id = x.MaxCustomer, Total = x.MaxTotal},
                 })
                 // Sort again by descaning TotalDue
-                .SortByDescending(x => x.MaxCust.Total).ToListAsync();
+                .SortByDescending(x => x.MaxCust.Total);
 
+            var queryToExplain = query.ToString();
 
-
+            var result = await query.ToListAsync();
+            // Display the result
             ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework", ConsoleColor.Magenta);
 
             ConsoleEx.WriteLine($"{TerId} {MaxCustoId} {MaxTotal}", ConsoleColor.Gray);
