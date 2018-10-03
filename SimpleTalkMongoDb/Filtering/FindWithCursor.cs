@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
+using System;
+using System.Threading.Tasks;
 
 
 namespace SimpleTalkMongoDb.Filtering
@@ -40,16 +40,16 @@ namespace SimpleTalkMongoDb.Filtering
             var cursor = collection.Find(x => x.TerritoryId == 1)
                 .Limit(TotalConst)
                 .SortBy(x => x.DueDate)
-                .Project(x => new {x.SalesOrderId, x.DueDate, x.AccountNumber});
+                .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber });
 
-             var query = cursor.ToString();
+            var query = cursor.ToString();
 
-               await cursor.ForEachAsync(doc =>
-                        ConsoleEx.WriteLine(
-                            $"\tSalesHeaderId :{doc.SalesOrderId}  DueDate       :{doc.DueDate.ToLocalTime()}  AccountNumber :{doc.AccountNumber}",
-                            ConsoleColor.Yellow)
+            await cursor.ForEachAsync(doc =>
+                     ConsoleEx.WriteLine(
+                         $"\tSalesHeaderId :{doc.SalesOrderId}  DueDate       :{doc.DueDate.ToLocalTime()}  AccountNumber :{doc.AccountNumber}",
+                         ConsoleColor.Yellow)
 
-                    );
+                 );
         }
 
         private static async Task UsingList(IMongoCollection<SalesHeader> collection)
@@ -57,9 +57,9 @@ namespace SimpleTalkMongoDb.Filtering
 
             ConsoleEx.WriteLine("Using List", ConsoleColor.Magenta);
             Console.WriteLine("------------");
-            var result = await collection.Find(x => x.TerritoryId==1)
+            var result = await collection.Find(x => x.TerritoryId == 1)
                 .Limit(TotalConst)
-                .SortBy(x=>x.DueDate)
+                .SortBy(x => x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })
                 .ToListAsync();
 
@@ -80,15 +80,15 @@ namespace SimpleTalkMongoDb.Filtering
             var fo = new FindOptions
             {
                 BatchSize = BatchSizeConst,
-                
+
             };
             var batchNo = 0;
-            using (var cursor = collection.Find(x => x.TerritoryId ==1, fo)
+            using (var cursor = collection.Find(x => x.TerritoryId == 1, fo)
                 .Limit(TotalConst)
                 .SortBy(x => x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })
                 .ToCursorAsync())
-            {
+
 
 
                 while (await cursor.Result.MoveNextAsync())
@@ -106,10 +106,10 @@ namespace SimpleTalkMongoDb.Filtering
                 }
 
 
-            }
 
 
-           ConsoleEx.WriteLine($"Should be :{ batchNo } batches",ConsoleColor.Red);
+
+            ConsoleEx.WriteLine($"Should be :{ batchNo } batches", ConsoleColor.Red);
         }
     }
 }
