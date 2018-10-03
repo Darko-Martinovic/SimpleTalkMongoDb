@@ -1,0 +1,1 @@
+﻿db.adventureWorks2016.explain("executionStats").find({ "TerritoryId": 1 }, { "_id": 1, "AccountNumber": 1, "DueDate": 1 }).sort({ "DueDate": 1 }).limit(5)

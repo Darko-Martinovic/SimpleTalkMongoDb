@@ -37,11 +37,14 @@ namespace SimpleTalkMongoDb.Filtering
         {
             ConsoleEx.WriteLine("Using ForEachAsync", ConsoleColor.Magenta);
             Console.WriteLine("------------");
-            await collection.Find(x=>true)
+            var cursor = collection.Find(x => x.TerritoryId == 1)
                 .Limit(TotalConst)
-                .SortBy(x=>x.DueDate)
-                .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })
-                .ForEachAsync(doc =>
+                .SortBy(x => x.DueDate)
+                .Project(x => new {x.SalesOrderId, x.DueDate, x.AccountNumber});
+
+             var query = cursor.ToString();
+
+               await cursor.ForEachAsync(doc =>
                         ConsoleEx.WriteLine(
                             $"\tSalesHeaderId :{doc.SalesOrderId}  DueDate       :{doc.DueDate.ToLocalTime()}  AccountNumber :{doc.AccountNumber}",
                             ConsoleColor.Yellow)
@@ -54,7 +57,7 @@ namespace SimpleTalkMongoDb.Filtering
 
             ConsoleEx.WriteLine("Using List", ConsoleColor.Magenta);
             Console.WriteLine("------------");
-            var result = await collection.Find(x => true)
+            var result = await collection.Find(x => x.TerritoryId==1)
                 .Limit(TotalConst)
                 .SortBy(x=>x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })
@@ -80,7 +83,7 @@ namespace SimpleTalkMongoDb.Filtering
                 
             };
             var batchNo = 0;
-            using (var cursor = collection.Find(x => true, fo)
+            using (var cursor = collection.Find(x => x.TerritoryId ==1, fo)
                 .Limit(TotalConst)
                 .SortBy(x => x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })

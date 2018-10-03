@@ -79,7 +79,7 @@ namespace SimpleTalkMongoDb.Filtering
         private static async Task UsingMongoAggFrameWork(IMongoCollection<SalesHeader> collection)
         {
 
-            var list = await collection.Find(x =>
+            var query =  collection.Find(x =>
                     (x.TerritoryId == 1 ||
                      x.TerritoryId == 2) && x.TotalDue > Limit && x.DueDate >= new DateTime(2014, 1, 1))
                 .Project(x => new
@@ -91,8 +91,10 @@ namespace SimpleTalkMongoDb.Filtering
                 })
                 .SortByDescending(x => x.TotalDue)
                 .ThenByDescending(x => x.OrderDate)
-                .Limit(3)
-                .ToListAsync();
+                .Limit(3);
+
+            var queryResult = query.ToString();
+            var list = await query.ToListAsync();
 
 
 
