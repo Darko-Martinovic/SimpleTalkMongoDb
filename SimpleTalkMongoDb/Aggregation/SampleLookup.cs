@@ -23,19 +23,19 @@ namespace SimpleTalkMongoDb.Aggregation
         //
         private static async Task MainAsync()
         {
+            // Define a couple of names
             var names = new[]
             {
                 new Person { FirstName = "Rita"},
                 new Person { FirstName = "Katarina" }
             };
-
+            // Define a couple of meanings
             var meanings = new[]
             {
                 new NameMeaning
                 {
                     Name = "Rita",
                     Definition = @"In American the meaning of the name Rita is: Pearl."
-
                 },
                 new NameMeaning
                 {
@@ -43,17 +43,16 @@ namespace SimpleTalkMongoDb.Aggregation
                     Definition = @"In Greek the meaning of the name Katarina is: Pure."
                 }
             };
-
             var db = SampleConfig.DbSampleLookup;
             var collPerson = SampleConfig.CollPerson;
             var collNameMeaning = SampleConfig.CollMeanings;
             // drop collections 
             db.DropCollection(collPerson.CollectionNamespace.CollectionName);
             db.DropCollection(collNameMeaning.CollectionNamespace.CollectionName);
-
+            // insert documents
             collPerson.InsertMany(names);
             collNameMeaning.InsertMany(meanings);
-
+            // Make lookup 
             var result = await collPerson.Aggregate()
                 .Lookup<Person, NameMeaning, LookedUpPerson>(collNameMeaning, 
                     x => x.FirstName, 

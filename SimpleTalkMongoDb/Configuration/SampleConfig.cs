@@ -31,8 +31,8 @@ namespace SimpleTalkMongoDb.Configuration
             CollProducts = Db.GetCollection<Product>(ConfigurationManager.AppSettings["MongoProducts"]);
 
             // Collections used to demonstate $lookup operator
-            CollPerson = Db.GetCollection<Person>(ConfigurationManager.AppSettings["MongoPersons"]);
-            CollMeanings = Db.GetCollection<NameMeaning>(ConfigurationManager.AppSettings["MongoMeanings"]);
+            CollPerson = DbSampleLookup.GetCollection<Person>(ConfigurationManager.AppSettings["MongoPersons"]);
+            CollMeanings = DbSampleLookup.GetCollection<NameMeaning>(ConfigurationManager.AppSettings["MongoMeanings"]);
 
             // T-SQL statements used to generate JSON files
             TsqlSales = ConfigurationManager.AppSettings["TSQL"];
