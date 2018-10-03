@@ -107,7 +107,7 @@ namespace SimpleTalkMongoDb.Aggregation
         private static async Task UsingMongoAggFrameWork(IMongoCollection<SalesHeader> collection)
         {
             var queryMongo = await collection.Aggregate()
-                .Unwind<SalesHeader, SalesDetailHelper>((x) => x.Details)
+                .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
                 .Group(x => new { x.Details.SpecialOfferId, x.Details.ProductId },
                     g => new
                     {

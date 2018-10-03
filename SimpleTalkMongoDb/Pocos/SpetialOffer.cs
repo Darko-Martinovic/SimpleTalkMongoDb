@@ -1,5 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace SimpleTalkMongoDb.Pocos
 {
@@ -21,37 +23,28 @@ namespace SimpleTalkMongoDb.Pocos
 
     }
 
-    public abstract class Result
+    public  class Result
     {
         [BsonId]
         public int Id { get; set; }
         public decimal LineTotal { get; set; }
-        public IEnumerable<SpetialOffer> SpetOffer
-        {
-            get { yield break; }
-        }
+        public IEnumerable<SpetialOffer> SpetOffer { get; set; }
 
-        public int ProductId => 0;
+        public int ProductId { get; set; }
     }
 
-    public abstract class ResultProduct
+    public  class ResultProduct
     {
         [BsonId]
-        public int Id => 0;
+        public int Id { get; set; }
 
-        public decimal LineTotal => 0;
+        public decimal LineTotal { get; set; }
 
-        public IEnumerable<SpetialOffer> SpetOffer
-        {
-            get { yield break; }
-        }
+        public IEnumerable<SpetialOffer> SpetOffer { get; set; }
 
-        public int ProductId => 0;
+        public int ProductId { get; set; }
 
-        public IEnumerable<Product> ProductName
-        {
-            get { yield break; }
-        }
+        public IEnumerable<Product> ProductName { get; set; }
     }
 
 
