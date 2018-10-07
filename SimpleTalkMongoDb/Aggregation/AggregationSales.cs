@@ -30,34 +30,23 @@ namespace SimpleTalkMongoDb.Aggregation
         /// <returns></returns>
         private static async Task MainAsync()
         {
-            MongoDatabase(out var collection, out var aggregationOptions);
 
-            await UsingMongoAggFramework(collection, aggregationOptions);
+            var collection = SampleConfig.Collection;
+
+            await UsingMongoAggFramework(collection);
 
             await UsingLinq(collection);
 
             await UsingMongoShellLikeSyntax();
         }
 
-        private static void MongoDatabase(out IMongoCollection<SalesHeader> collection, out AggregateOptions aggregationOptions)
-        {
-            collection = SampleConfig.Collection;
-           
+        
 
-            aggregationOptions = new AggregateOptions
-            {
-                AllowDiskUse = true,
-                
-                
-            };
-
-        }
-
-        private static async Task UsingMongoAggFramework(IMongoCollection<SalesHeader> collection, AggregateOptions aggregationOptions)
+        private static async Task UsingMongoAggFramework(IMongoCollection<SalesHeader> collection)
         {
 
             // Let's aggregate
-            var query =  collection.Aggregate(aggregationOptions)
+            var query =  collection.Aggregate()
                 // First group by TerritoryId plus CustomerId
                 .Group(x => new {x.TerritoryId, x.CustomerId},
                     g => new {TerritoryIdCustomerId = g.Key, TotalDue = g.Sum(x => x.TotalDue)})
