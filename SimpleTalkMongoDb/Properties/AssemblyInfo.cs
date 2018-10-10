@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CreateMongoJson")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Programming Mongo DB using .NET driver")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Darko Martinovic")]
 [assembly: AssemblyProduct("CreateMongoJson")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
