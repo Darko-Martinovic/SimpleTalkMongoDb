@@ -135,8 +135,7 @@
     <EmbeddedResource Include="Authentication\AddUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Aggregation\CreateIndex.js" />
-    <Content Include="Aggregation\Query.js" />
+    <Content Include="Filtering\CreateIndex.js" />
     <Content Include="Filtering\QueryFilterHeader.js" />
     <Content Include="Filtering\QueryUsingCursor.js" />
   </ItemGroup>
