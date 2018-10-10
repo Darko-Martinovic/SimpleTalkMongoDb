@@ -10,12 +10,6 @@ namespace SimpleTalkMongoDb.CRUD_operations
 {
     internal static class CrudDemo
     {
-        private const int IdToAdd = 20;
-        private const int IdToAddMany = 30;
-        private const int IdToAddMany2 = 31;
-        private const int IdToUpsert = 40;
-
-
         public static void Main(string[] args)
         {
             MainAsync().Wait();
@@ -325,8 +319,17 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         #endregion
 
+        #region Constants
+
+        private const int IdToAdd = 20;
+        private const int IdToAddMany = 30;
+        private const int IdToAddMany2 = 31;
+        private const int IdToUpsert = 40;
 
 
+
+
+        #endregion
 
 
 

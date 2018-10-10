@@ -9,36 +9,29 @@ namespace SimpleTalkMongoDb.Authentication
 {
     public static class Auth
     {
-        private const string UserName = "usrSimpleTalk";
-        private const string Passwrod = "pwdSimpleTalk";
-        private const string Dbase = "simpleTalk";
-        private const string Collection = "adventureWorks2016";
 
         public static void Main(string[] args)
         {
             Worker();
         }
 
-
+        /// <summary>
+        /// Shows various way how to connect to MongoDB
+        /// </summary>
         private static void Worker()
         {
 
             var credential =
                 MongoCredential.CreateCredential(databaseName: Dbase, username: UserName, password: Passwrod);
 
-
-
             var settings = new MongoClientSettings
             {
                 Credential = credential
             };
-
             var mongoClient = new MongoClient(settings);
             var db = mongoClient.GetDatabase($"{Dbase}");
-
             var numberOfDocuments = db.GetCollection<SalesHeader>($"{Collection}")
                 .CountDocumentsAsync(new BsonDocument()).Result;
-
             //Using connectionString
             var connectionString = $"mongodb://{UserName}:{Passwrod}@localhost:27017/{Dbase}";
 
@@ -74,6 +67,16 @@ namespace SimpleTalkMongoDb.Authentication
             Console.ReadLine();
 
         }
+
+        #region Constants
+
+        private const string UserName = "usrSimpleTalk";
+        private const string Passwrod = "pwdSimpleTalk";
+        private const string Dbase = "simpleTalk";
+        private const string Collection = "adventureWorks2016";
+
+
+        #endregion
 
     }
 

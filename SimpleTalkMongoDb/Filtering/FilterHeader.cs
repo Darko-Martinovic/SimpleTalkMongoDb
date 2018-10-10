@@ -20,7 +20,7 @@ namespace SimpleTalkMongoDb.Filtering
         }
 
         /// <summary>
-        /// 
+        /// How to find a document, using LINQ and IFindFluent
         /// </summary>
         /// <returns></returns>
         private static async Task MainAsync()
