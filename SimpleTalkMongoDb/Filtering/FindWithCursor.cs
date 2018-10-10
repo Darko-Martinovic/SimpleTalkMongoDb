@@ -42,7 +42,7 @@ namespace SimpleTalkMongoDb.Filtering
                 .SortBy(x => x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber });
 
-            var query = cursor.ToString();
+            //var query = cursor.ToString();
 
             await cursor.ForEachAsync(doc =>
                      ConsoleEx.WriteLine(

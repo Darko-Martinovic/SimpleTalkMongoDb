@@ -3,7 +3,6 @@ using MongoDB.Driver.Linq;
 
 using System;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 
@@ -92,7 +91,7 @@ namespace SimpleTalkMongoDb.Filtering
                 .ThenByDescending(x => x.OrderDate)
                 .Limit(3);
 
-            var queryResult = query.ToString();
+            //var queryResult = query.ToString();
             var list = await query.ToListAsync();
 
 
