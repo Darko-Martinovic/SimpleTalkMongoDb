@@ -31,18 +31,21 @@ namespace SimpleTalkMongoDb.Aggregation
         private static async Task MainAsync()
         {
 
-            var collection = SampleConfig.Collection;
+            
+            await UsingIAggregateFluent(SampleConfig.Collection);
 
-            await UsingMongoAggFramework(collection);
-
-            await UsingLinq(collection);
+            await UsingLinq(SampleConfig.Collection);
 
             await UsingMongoShellLikeSyntax();
         }
 
         
-
-        private static async Task UsingMongoAggFramework(IMongoCollection<SalesHeader> collection)
+        /// <summary>
+        /// Using IAggregateFluent
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static async Task UsingIAggregateFluent(IMongoCollection<SalesHeader> collection)
         {
 
             // Let's aggregate
@@ -74,7 +77,7 @@ namespace SimpleTalkMongoDb.Aggregation
 
             var result = await query.ToListAsync();
             // Display the result
-            ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework", ConsoleColor.Magenta);
+            ConsoleEx.WriteLine("\tUsing MongoDB IAggregateFluent", ConsoleColor.Magenta);
 
             ConsoleEx.WriteLine($"{TerId} {MaxCustoId} {MaxTotal}", ConsoleColor.Gray);
             foreach (var d in result)
@@ -87,6 +90,12 @@ namespace SimpleTalkMongoDb.Aggregation
             }
         }
 
+
+        /// <summary>
+        /// Using LINQ
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task UsingLinq(IMongoCollection<SalesHeader> collection)
         {
             // USING LINQ 
@@ -140,6 +149,11 @@ namespace SimpleTalkMongoDb.Aggregation
             }
         }
 
+
+        /// <summary>
+        /// Using MongoDB shell like syntax
+        /// </summary>
+        /// <returns></returns>
         private static async Task UsingMongoShellLikeSyntax()
         {
 // USING STRING PARSER
