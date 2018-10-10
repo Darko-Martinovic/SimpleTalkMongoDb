@@ -3,6 +3,7 @@ using MongoDB.Driver.Linq;
 
 using System;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 
@@ -26,15 +27,13 @@ namespace SimpleTalkMongoDb.Filtering
         private static async Task MainAsync()
         {
 
-            var collection = SampleConfig.Collection;
-
-            await UsingMongoAggFrameWork(collection);
-            await UsingLinq(collection);
+            await UsingMongoAggFrameWork(SampleConfig.Collection);
+            await UsingLinq(SampleConfig.Collection);
         }
 
 
         /// <summary>
-        /// 
+        /// Using LINQ
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
@@ -72,7 +71,7 @@ namespace SimpleTalkMongoDb.Filtering
 
 
         /// <summary>
-        /// 
+        /// Using IFindFluent
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>

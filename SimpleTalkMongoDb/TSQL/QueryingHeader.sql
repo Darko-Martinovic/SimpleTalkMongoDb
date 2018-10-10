@@ -4,7 +4,7 @@
 --The result should be sorted on Sum of TotalDue descending.
 --The result should contain only three records.
 
----1. Using cross apply in master
+---1. Using cross apply in the Master table
 --  Find max-min customer per teritory 
 DECLARE @limit MONEY = 950000
 ;

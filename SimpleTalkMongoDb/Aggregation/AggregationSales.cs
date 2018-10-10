@@ -73,7 +73,7 @@ namespace SimpleTalkMongoDb.Aggregation
                 // Sort again by descaning TotalDue
                 .SortByDescending(x => x.MaxCust.Total);
 
-            var queryToExplain = query.ToString();
+            //var queryToExplain = query.ToString();
 
             var result = await query.ToListAsync();
             // Display the result

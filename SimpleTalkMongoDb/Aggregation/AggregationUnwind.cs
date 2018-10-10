@@ -20,28 +20,25 @@ namespace SimpleTalkMongoDb.Aggregation
         }
         private static async Task MainAsync()
         {
-            var collection = SetupClient();
+
 
             //Using LINQ
-            await UsingLinqChain(collection);
+            await UsingLinqChain(SampleConfig.Collection);
 
             //Using LINQ with Lookup
-            await UsingLinqChainWithLookup(collection);
+            await UsingLinqChainWithLookup(SampleConfig.Collection);
 
-            //Using MongoDB Aggregation framework
-            await UsingMongoAggFrameWork(collection);
+            //Using MongoDB IAggregateFluent
+            await UsingMongoAggFrameWork(SampleConfig.Collection);
 
-            //Using MongoDB Aggregation framework with Lookup
-            await UsingMongoAggFrameWorkWithLookUp(collection);
+            //Using MongoDB IAggregateFluent with Lookup
+            await UsingMongoAggFrameWorkWithLookUp(SampleConfig.Collection);
 
             //Using shell like syntax
-            await UsingShellLikeSyntax(collection);
+            await UsingShellLikeSyntax(SampleConfig.Collection);
         }
 
-        private static IMongoCollection<SalesHeader> SetupClient()
-        {
-            return SampleConfig.Collection;
-        }
+
 
         private static async Task UsingShellLikeSyntax(IMongoCollection<SalesHeader> collection)
         {

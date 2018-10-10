@@ -4,7 +4,7 @@
 --The result should be sorted on Sum of LineTotal descanding.
 --The result should contain only three records. 
 
--- Cross Apply in Detail
+-- Cross Apply - working with SalesOrderDetail
 DECLARE @limit MONEY = 200000
 ;
 WITH x
