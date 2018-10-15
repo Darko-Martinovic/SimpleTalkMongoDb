@@ -41,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.CRUD_operations.CrudDemo</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Filtering.FilterHeader</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
