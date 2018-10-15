@@ -41,7 +41,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.Aggregation.SampleUnwind</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Authentication.Auth</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -135,9 +135,9 @@
     <EmbeddedResource Include="Authentication\AddUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Filtering\CreateIndex.js" />
-    <Content Include="Filtering\QueryFilterHeader.js" />
-    <Content Include="Filtering\QueryUsingCursor.js" />
+    <Content Include="Filtering\Mongo shell\CreateIndex.js" />
+    <Content Include="Filtering\Mongo shell\QueryFilterHeader.js" />
+    <Content Include="Filtering\Mongo shell\QueryUsingCursor.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

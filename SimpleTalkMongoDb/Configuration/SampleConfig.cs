@@ -12,23 +12,30 @@ namespace SimpleTalkMongoDb.Configuration
 
         static SampleConfig()
         {
-            // Path to AdventureWorks2016 database 
+            // Path to the AdventureWorks2016 database 
             ConnectionString = ConfigurationManager.ConnectionStrings["ConnStr"].ConnectionString;
+
             // MongoDB Client
             Client = new MongoClient(ConfigurationManager.AppSettings["MongoConnStr"]);
+
             // MongoDB Database - default 'simpleTalk'
             Db = Client.GetDatabase(ConfigurationManager.AppSettings["MongoDbName"]);
+
             // To demonstrate $lookup operator, 'sampleLookup' database is used
             DbSampleLookup = Client.GetDatabase(ConfigurationManager.AppSettings["SampleLookup"]);
 
             // The main collection 'adventureWorks2016'
             Collection = Db.GetCollection<SalesHeader>(ConfigurationManager.AppSettings["MongoCollectionName"]);
+
             // The collection that supports dynamic schema
             Db.GetCollection<BsonDocument>(ConfigurationManager.AppSettings["MongoCollectionName"]);
+
             // The Spetial Offer Collection
             CollSpetialOffer = Db.GetCollection<SpetialOffer>(ConfigurationManager.AppSettings["MongoSpetialOfferCollectionName"]);
+
             // The Product Collection
             CollProducts = Db.GetCollection<Product>(ConfigurationManager.AppSettings["MongoProducts"]);
+
 
             // Collections used to demonstate $lookup operator
             CollPerson = DbSampleLookup.GetCollection<Person>(ConfigurationManager.AppSettings["MongoPersons"]);

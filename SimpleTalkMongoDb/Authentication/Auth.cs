@@ -62,10 +62,12 @@ namespace SimpleTalkMongoDb.Authentication
             var numberOfDocuments3 = db.GetCollection<SalesHeader>($"{Collection}")
                 .CountDocumentsAsync(new BsonDocument()).Result;
 
-
-            ConsoleEx.WriteLine($"Number of documents : {numberOfDocuments}/{numberOfDocument2}/{numberOfDocuments3}",ConsoleColor.Yellow);
+            ConsoleEx.WriteLine("In order to prove that we are successfully connected, let's count the number of documents in the 'adventureWorks2016' collection.", ConsoleColor.Cyan);
+            ConsoleEx.WriteLine($"Number of documents : {numberOfDocuments}/{numberOfDocument2}/{numberOfDocuments3}", ConsoleColor.Yellow);
+            ConsoleEx.WriteLine($"I did not find usefull commands in the mongo shell to display active connection.", ConsoleColor.Red);
+            ConsoleEx.WriteLine("'db.serverStatus().connection' will help, but it in the resulting document, there is no detaild information about connection");
+            ConsoleEx.WriteLine("'netstat –b' will helps too!");
             Console.ReadLine();
-
         }
 
         #region Constants
