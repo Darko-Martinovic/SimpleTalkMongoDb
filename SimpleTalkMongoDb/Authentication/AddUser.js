@@ -1,4 +1,5 @@
-﻿//use simpleTalk
+﻿// We will add the user and grant read and write permission.
+//use simpleTalk
 
 db.createUser(
     {
