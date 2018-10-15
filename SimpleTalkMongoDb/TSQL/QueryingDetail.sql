@@ -1,8 +1,7 @@
-﻿--Top n per group problem
---Let's find top one product per spetial offer that has the greatest LineTotal
---and then limit the result to those spetial offers and products where sum of LineTotal is greater than the Limit
---The result should be sorted on Sum of LineTotal descanding.
---The result should contain only three records. 
+﻿--The Top N per Group Problem
+--Let's find top one product per special offer that has the greatest LineTotal
+--and then limit the result to those special offers and products where the sum of LineTotal is greater than the Limit.
+--The result should be sorted on Sum of LineTotal descending.
 
 -- Cross Apply - working with SalesOrderDetail
 DECLARE @limit MONEY = 200000
