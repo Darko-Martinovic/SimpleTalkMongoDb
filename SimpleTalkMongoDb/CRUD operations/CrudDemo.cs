@@ -18,6 +18,7 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         /// <summary>
         /// Performs various CRUD operaton on 'spetialOffer' collection
+        /// NOTE:'R' part in CRUD acronym has also an example in 'Filtering' folder
         /// </summary>
         /// <returns></returns>
         private static async Task MainAsync()
@@ -39,7 +40,7 @@ namespace SimpleTalkMongoDb.CRUD_operations
         }
 
 
-        #region  Insert operation 
+    
 
         private static async Task InsertOne(IMongoCollection<SpetialOffer> collection)
         {
@@ -183,9 +184,8 @@ namespace SimpleTalkMongoDb.CRUD_operations
         }
 
 
-        #endregion
+    
         
-        #region  Update / Replace operation 
 
         private static async Task ReplaceOneDemo(IMongoCollection<SpetialOffer> collection)
         {
@@ -294,9 +294,8 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         }
 
-        #endregion
+
         
-        #region  Delete operation 
 
         private static async Task DeleteOne(IMongoCollection<SpetialOffer> collSpetialOffer)
         {
@@ -317,9 +316,8 @@ namespace SimpleTalkMongoDb.CRUD_operations
         }
 
 
-        #endregion
 
-        #region Constants
+
 
         private const int IdToAdd = 20;
         private const int IdToAddMany = 30;
@@ -329,7 +327,7 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
 
 
-        #endregion
+
 
 
 
