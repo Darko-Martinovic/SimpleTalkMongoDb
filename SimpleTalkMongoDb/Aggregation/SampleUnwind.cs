@@ -23,21 +23,18 @@ namespace SimpleTalkMongoDb.Aggregation
            
           
             var collection = SampleConfig.Collection;
-
-
-            var result = await collection.Aggregate().Limit(1)
+           
+            var result = await collection.Aggregate()
                 .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
-                .Project(x=>new {x.Details.SalesOrderDetailId})
-                .ToListAsync();
-               
+                .Project(x => new {x.Details.SalesOrderDetailId}).ToListAsync();
 
-            foreach (var example in result)
-            {
-                Console.WriteLine($"{example.SalesOrderDetailId.ToString().PadRight(10)}");
-            }
+            ConsoleEx.WriteLine("By applying Unwind on the whole collection the number of documents rapidly grows and it is equal to :" , ConsoleColor.Cyan);
+            ConsoleEx.WriteLine(result.Count.ToString() , ConsoleColor.Yellow);
+            ConsoleEx.WriteLine("Notice that this is the same number as 'SELECT COUNT(*) FROM Sales.SalesDetail'", ConsoleColor.Cyan);
+
 
         }
 
-     
+
     }
 }
