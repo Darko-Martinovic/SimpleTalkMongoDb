@@ -41,7 +41,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
 
     
-
+        /// <summary>
+        /// Demo: Inserting one document
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task InsertOne(IMongoCollection<SpetialOffer> collection)
         {
 
@@ -76,6 +80,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         }
 
+        /// <summary>
+        /// Demo:Inserting multiple documents
+        /// </summary>
+        /// <param name="collSpetialOffer"></param>
+        /// <returns></returns>
         private static async Task InsertManyDemo(IMongoCollection<SpetialOffer> collSpetialOffer)
         {
             var so = new[]
@@ -186,7 +195,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
     
         
-
+        /// <summary>
+        /// Demo:Replace one document
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task ReplaceOneDemo(IMongoCollection<SpetialOffer> collection)
         {
 
@@ -231,6 +244,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         }
 
+
+        /// <summary>
+        /// Demo:Update one document
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task UpdateOneDemo(IMongoCollection<SpetialOffer> collection)
         {
 
@@ -262,6 +281,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
         }
 
+
+        /// <summary>
+        /// Demo: Upsert
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task ReplaceUpsertDemo(IMongoCollection<SpetialOffer> collection)
         {
 
@@ -296,7 +321,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
 
         
-
+        /// <summary>
+        /// Demo:Delete one document
+        /// </summary>
+        /// <param name="collSpetialOffer"></param>
+        /// <returns></returns>
         private static async Task DeleteOne(IMongoCollection<SpetialOffer> collSpetialOffer)
         {
             Console.WriteLine();
@@ -306,13 +335,19 @@ namespace SimpleTalkMongoDb.CRUD_operations
             Console.WriteLine($"Is deleted completed : {result.IsAcknowledged}");
         }
 
+
+        /// <summary>
+        /// Demo: Delete multiple documents
+        /// </summary>
+        /// <param name="collSpetialOffer"></param>
+        /// <returns></returns>
         private static async Task DeleteManyDemo(IMongoCollection<SpetialOffer> collSpetialOffer)
         {
             Console.WriteLine();
             ConsoleEx.WriteLine($"Deleting documents SpetialOfferId >= {IdToAddMany}", ConsoleColor.Red);
             Console.WriteLine();
             var result = await collSpetialOffer.DeleteManyAsync(x => x.SpecialOfferId >= IdToAddMany);
-            Console.WriteLine($"Is deleted completed : {result.IsAcknowledged} number of deleted record : {result.DeletedCount}");
+            Console.WriteLine($"Is deleted completed : {result.IsAcknowledged} .The number of deleted records : {result.DeletedCount}");
         }
 
 
