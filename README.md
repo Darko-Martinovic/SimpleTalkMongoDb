@@ -27,8 +27,7 @@ Auth                                             | Shows how to conect to MongoD
 
 Class Name                                       | Description
 -------------------------------------------------|---------------------------------------------------------------------------------
-SampleConfig                                     | Unlike ADO.NET, MongoDB client is a cheap resource. It is completely safe 
-                                                 | to be set up once and uses globally as a static field of a configuration object
+SampleConfig                                     | Unlike ADO.NET, MongoDB client is a cheap resource. 
 
 ## :white_check_mark: CRUD operation
 
