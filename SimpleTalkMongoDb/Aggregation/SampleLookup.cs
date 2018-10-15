@@ -60,7 +60,7 @@ namespace SimpleTalkMongoDb.Aggregation
                     x => x.Meanings
             ).ToListAsync();
 
-            ConsoleEx.WriteLine("The name is written in red and the name's meaning in Cyan ( the meaning is  from the second collection)", ConsoleColor.Yellow);
+            ConsoleEx.WriteLine("The name is written in red and the name's meaning in cyan ( the meaning is  from the second collection)", ConsoleColor.Yellow);
             foreach (var example in result)
             {
                 ConsoleEx.WriteLine($"{example.FirstName.PadRight(10)}", ConsoleColor.Red);
