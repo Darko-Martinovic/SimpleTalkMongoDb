@@ -22,10 +22,13 @@ namespace SimpleTalkMongoDb.Filtering
 
             var collection = SampleConfig.Collection;
 
+            Console.WriteLine("Shows how we could get the query plan from the code");
+            Console.WriteLine(" ".PadRight(70,'-'));
             var options = new FindOptions
             {
                 Modifiers = new BsonDocument("$explain", true)
             };
+
             var explain = await collection.Find(x =>
                     (x.TerritoryId == 1 ||
                      x.TerritoryId == 2) && x.TotalDue > 1 && x.DueDate >= new DateTime(2014, 1, 1), options)
