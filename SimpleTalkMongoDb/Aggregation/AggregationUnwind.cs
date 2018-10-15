@@ -18,28 +18,232 @@ namespace SimpleTalkMongoDb.Aggregation
             MainAsync().Wait();
             Console.ReadLine();
         }
+
+
+        /// <summary>
+        /// The various way how to accomplish the aggregation task in embedded documents
+        /// ( the detail table in AdventureWorks2016 )
+        /// </summary>
+        /// <returns></returns>
         private static async Task MainAsync()
         {
 
-
-            //Using LINQ
-            await UsingLinqChain(SampleConfig.Collection);
-
-            //Using LINQ with Lookup
-            await UsingLinqChainWithLookup(SampleConfig.Collection);
-
             //Using MongoDB IAggregateFluent
-            await UsingMongoAggFrameWork(SampleConfig.Collection);
+            await UsingIAggregateFluent(SampleConfig.Collection);
 
             //Using MongoDB IAggregateFluent with Lookup
-            await UsingMongoAggFrameWorkWithLookUp(SampleConfig.Collection);
+            await UsingIAggregateFluentWithLookup(SampleConfig.Collection);
+
+
+            //Using LINQ
+            await UsingLinq(SampleConfig.Collection);
+
+            //Using LINQ with Lookup
+            await UsingLinqWithLookup(SampleConfig.Collection);
 
             //Using shell like syntax
             await UsingShellLikeSyntax(SampleConfig.Collection);
         }
 
 
+        /// <summary>
+        /// Using IAggreateFluent
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static async Task UsingIAggregateFluent(IMongoCollection<SalesHeader> collection)
+        {
+            var queryMongo = await collection.Aggregate()
+                .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
+                .Group(x => new { x.Details.SpecialOfferId, x.Details.ProductId },
+                    g => new
+                    {
+                        SpecialOfferIdPlusProductId = g.Key,
+                        LineTotal = g.Sum(x => x.Details.LineTotal)
+                    })
+                .SortByDescending(p => p.LineTotal)
+                .Group(x => x.SpecialOfferIdPlusProductId.SpecialOfferId,
+                    g => new
+                    {
+                        SpecialOfferId = g.Key,
+                        Product = g.First().SpecialOfferIdPlusProductId.ProductId,
+                        LineTotal = g.Max(x => x.LineTotal)
+                    })
+                .SortByDescending(p => p.LineTotal)
+                .Match(x => x.LineTotal > Limit)
+                .ToListAsync();
 
+
+            ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework", ConsoleColor.Magenta);
+            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
+
+            foreach (var d in queryMongo)
+            {
+                //Console.WriteLine(d.ToJson(jsonWritter));
+
+                ConsoleEx.WriteLine(
+                    $"{d.SpecialOfferId.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $" {d.Product.ToString().PadLeft(MaxProductId.Length)} " +
+                    $"{d.LineTotal:N2}", ConsoleColor.Yellow);
+            }
+        }
+
+        /// <summary>
+        /// Using IAggregateFluent With Lookup
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static async Task UsingIAggregateFluentWithLookup(IMongoCollection<SalesHeader> collection)
+        {
+            var otherCollection = SampleConfig.CollSpetialOffer;
+            var prodColl = SampleConfig.CollProducts;
+
+            var queryMongo = await collection.Aggregate()
+                .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
+                .Group(x => new { x.Details.SpecialOfferId, x.Details.ProductId },
+                    g => new
+                    {
+                        SpecialOfferIdPlusProductId = g.Key,
+                        LineTotal = g.Sum(x => x.Details.LineTotal)
+                    })
+                .SortByDescending(p => p.LineTotal)
+                .Group(x => x.SpecialOfferIdPlusProductId.SpecialOfferId,
+                    g => new SalesDetail
+                    {
+                        SpecialOfferId = g.Key,
+                        ProductId = g.First().SpecialOfferIdPlusProductId.ProductId,
+                        LineTotal = g.Max(x => x.LineTotal)
+                    })
+                .SortByDescending(p => p.LineTotal)
+                .Match(x => x.LineTotal > Limit)
+                .Lookup<SalesDetail, SpetialOffer, Result>(otherCollection, x => x.SpecialOfferId, y => y.SpecialOfferId,
+                    x => x.SpetOffer)
+                .Lookup<Result, Product, ResultProduct>(prodColl, x => x.ProductId, y => y.ProductId,
+                    x => x.ProductName
+                ).ToListAsync();
+
+
+
+            ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework with Lookup", ConsoleColor.Magenta);
+            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId} {ProductName} {MaxTotal}");
+
+            foreach (var d in queryMongo)
+            {
+                ConsoleEx.WriteLine
+                (
+                    $"{d.Id.ToString().PadRight(SpetailOfferId.Length)} " +
+                    $"{d.SpetOffer.ElementAt(0).Description.Trim().PadRight(Description.Length)} " +
+                    $"{d.ProductId.ToString().PadLeft(MaxProductId.Length)} " +
+                    $"{d.ProductName.ElementAt(0).ProductName.Trim().PadLeft(ProductName.Length)} " +
+                    $"{d.LineTotal:N2}",
+                    ConsoleColor.Yellow
+                );
+            }
+        }
+
+        /// <summary>
+        /// Using LINQ
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static async Task UsingLinq(IMongoCollection<SalesHeader> collection)
+        {
+            var query = await collection.AsQueryable()
+                .SelectMany(p => p.Details, (p, salesDetail) => new
+                {
+                    salesDetail.SpecialOfferId,
+                    salesDetail.ProductId,
+                    salesDetail.LineTotal
+                })
+                .GroupBy(p => new { p.SpecialOfferId, p.ProductId })
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    LineTotal = g.Sum(x => x.LineTotal)
+                })
+                .OrderByDescending(p => p.LineTotal)
+                .GroupBy(p => p.Name.SpecialOfferId)
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    Product = g.First().Name.ProductId,
+                    LineTotal = g.Max(x => x.LineTotal),
+                })
+                .OrderByDescending(p => p.LineTotal)
+                .Where(p => p.LineTotal >= Limit).ToListAsync();
+            //.Select(p => new { p.Name, p.Product, p.LineTotal }).ToListAsync();
+
+
+            ConsoleEx.WriteLine("\tUsing LINQ", ConsoleColor.Magenta);
+            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
+
+            foreach (var e in query)
+            {
+                ConsoleEx.WriteLine(
+                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
+                    $"{e.LineTotal:N2}", ConsoleColor.Yellow);
+            }
+        }
+
+        /// <summary>
+        /// Using LINQ with Lookup
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        private static async Task UsingLinqWithLookup(IMongoCollection<SalesHeader> collection)
+        {
+            var spetialOfferColl = SampleConfig.CollSpetialOffer;
+            var productColl = SampleConfig.CollProducts;
+
+            var query = await collection.AsQueryable()
+                    .SelectMany(p => p.Details, (p, salesDetail) => new
+                    {
+                        salesDetail.SpecialOfferId,
+                        salesDetail.ProductId,
+                        salesDetail.LineTotal
+                    })
+                    .GroupBy(p => new { p.SpecialOfferId, p.ProductId })
+                    .Select(g => new
+                    {
+                        Name = g.Key,
+                        LineTotal = g.Sum(x => x.LineTotal)
+                    })
+                    .OrderByDescending(p => p.LineTotal)
+                    .GroupBy(p => p.Name.SpecialOfferId)
+                    .Select(g => new
+                    {
+                        Name = g.Key,
+                        Product = g.First().Name.ProductId,
+                        LineTotal = g.Max(x => x.LineTotal),
+                    })
+                .Join(spetialOfferColl, x => x.Name, y => y.SpecialOfferId, (x, y) => new { x.Name, y.Description, x.LineTotal, x.Product })
+                .Join(productColl, x => x.Product, y => y.ProductId, (x, y) => new { x.Name,x.Description, y.ProductName, x.LineTotal, x.Product })
+                     .OrderByDescending(p => p.LineTotal)
+                     .Where(p => p.LineTotal >= Limit).ToListAsync();
+            //.Select(p => new { p.Name, p.Product, p.LineTotal }).ToListAsync();
+
+
+            ConsoleEx.WriteLine("\tUsing LINQ with Lookup", ConsoleColor.Magenta);
+            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId} {ProductName} {MaxTotal}");
+
+            foreach (var e in query)
+            {
+                ConsoleEx.WriteLine(
+                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $"{e.Description.PadRight(Description.Length)}" +
+                    $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
+                    $" {e.ProductName.PadLeft(ProductName.Length)} " +
+                    $"{e.LineTotal:N2}", ConsoleColor.Yellow);
+            }
+        }
+
+
+        /// <summary>
+        /// Using MongoDB shell-like syntax
+        /// </summary>
+        /// <param name="collection"></param>
+        /// <returns></returns>
         private static async Task UsingShellLikeSyntax(IMongoCollection<SalesHeader> collection)
         {
             var result = await collection.Aggregate()
@@ -98,181 +302,6 @@ namespace SimpleTalkMongoDb.Aggregation
                     $"{example.GetElement("SpecialOfferId").Value.ToString().PadRight(SpetailOfferId.Length)} " +
                     $"{example.GetElement("Product").Value.ToString().PadLeft(MaxProductId.Length)} " +
                     $"{((decimal)example.GetElement("Total").Value):N2}", ConsoleColor.Yellow);
-            }
-        }
-
-        private static async Task UsingMongoAggFrameWork(IMongoCollection<SalesHeader> collection)
-        {
-            var queryMongo = await collection.Aggregate()
-                .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
-                .Group(x => new { x.Details.SpecialOfferId, x.Details.ProductId },
-                    g => new
-                    {
-                        SpecialOfferIdPlusProductId = g.Key,
-                        LineTotal = g.Sum(x => x.Details.LineTotal)
-                    })
-                .SortByDescending(p => p.LineTotal)
-                .Group(x => x.SpecialOfferIdPlusProductId.SpecialOfferId,
-                    g => new
-                    {
-                        SpecialOfferId = g.Key,
-                        Product = g.First().SpecialOfferIdPlusProductId.ProductId,
-                        LineTotal = g.Max(x => x.LineTotal)
-                    })
-                .SortByDescending(p => p.LineTotal)
-                .Match(x => x.LineTotal > Limit)
-                .ToListAsync();
-
-
-            ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
-
-            foreach (var d in queryMongo)
-            {
-                //Console.WriteLine(d.ToJson(jsonWritter));
-
-                ConsoleEx.WriteLine(
-                    $"{d.SpecialOfferId.ToString().PadRight(SpetailOfferId.Length)}" +
-                    $" {d.Product.ToString().PadLeft(MaxProductId.Length)} " +
-                    $"{d.LineTotal:N2}", ConsoleColor.Yellow);
-            }
-        }
-
-
-        private static async Task UsingMongoAggFrameWorkWithLookUp(IMongoCollection<SalesHeader> collection)
-        {
-            var otherCollection = SampleConfig.CollSpetialOffer;
-            var prodColl = SampleConfig.CollProducts;
-
-            var queryMongo = await collection.Aggregate()
-                .Unwind<SalesHeader, SalesDetailHelper>(x => x.Details)
-                .Group(x => new { x.Details.SpecialOfferId, x.Details.ProductId },
-                    g => new
-                    {
-                        SpecialOfferIdPlusProductId = g.Key,
-                        LineTotal = g.Sum(x => x.Details.LineTotal)
-                    })
-                .SortByDescending(p => p.LineTotal)
-                .Group(x => x.SpecialOfferIdPlusProductId.SpecialOfferId,
-                    g => new SalesDetail
-                    {
-                        SpecialOfferId = g.Key,
-                        ProductId = g.First().SpecialOfferIdPlusProductId.ProductId,
-                        LineTotal = g.Max(x => x.LineTotal)
-                    })
-                .SortByDescending(p => p.LineTotal)
-                .Match(x => x.LineTotal > Limit)
-                .Lookup<SalesDetail, SpetialOffer, Result>(otherCollection, x => x.SpecialOfferId, y => y.SpecialOfferId,
-                    x => x.SpetOffer)
-                .Lookup<Result, Product, ResultProduct>(prodColl, x => x.ProductId, y => y.ProductId,
-                    x => x.ProductName
-                ).ToListAsync();
-
-
-
-            ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework with Lookup", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId} {MaxTotal}");
-
-            foreach (var d in queryMongo)
-            {
-                ConsoleEx.WriteLine
-                (
-                    $"{d.Id.ToString().PadRight(SpetailOfferId.Length)} " +
-                    $"{d.SpetOffer.ElementAt(0).Description.Trim().PadRight(Description.Length)} " +
-                    $"{d.ProductId.ToString().PadRight(MaxProductId.Length)} " +
-                    $"{d.ProductName.ElementAt(0).ProductName.Trim().PadRight(ProductName.Length)} " +
-                    $"{d.LineTotal:N2}",
-                    ConsoleColor.Yellow
-                );
-            }
-        }
-
-
-        private static async Task UsingLinqChain(IMongoCollection<SalesHeader> collection)
-        {
-            var query = await collection.AsQueryable()
-                .SelectMany(p => p.Details, (p, salesDetail) => new
-                {
-                    salesDetail.SpecialOfferId,
-                    salesDetail.ProductId,
-                    salesDetail.LineTotal
-                })
-                .GroupBy(p => new { p.SpecialOfferId, p.ProductId })
-                .Select(g => new
-                {
-                    Name = g.Key,
-                    LineTotal = g.Sum(x => x.LineTotal)
-                })
-                .OrderByDescending(p => p.LineTotal)
-                .GroupBy(p => p.Name.SpecialOfferId)
-                .Select(g => new
-                {
-                    Name = g.Key,
-                    Product = g.First().Name.ProductId,
-                    LineTotal = g.Max(x => x.LineTotal),
-                })
-                .OrderByDescending(p => p.LineTotal)
-                .Where(p => p.LineTotal >= Limit).ToListAsync();
-            //.Select(p => new { p.Name, p.Product, p.LineTotal }).ToListAsync();
-
-
-            ConsoleEx.WriteLine("\tUsing LINQ", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
-
-            foreach (var e in query)
-            {
-                ConsoleEx.WriteLine(
-                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
-                    $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
-                    $"{e.LineTotal:N2}", ConsoleColor.Yellow);
-            }
-        }
-
-
-        private static async Task UsingLinqChainWithLookup(IMongoCollection<SalesHeader> collection)
-        {
-            var spetialOfferColl = SampleConfig.CollSpetialOffer;
-            var productColl = SampleConfig.CollProducts;
-
-            var query = await collection.AsQueryable()
-                    .SelectMany(p => p.Details, (p, salesDetail) => new
-                    {
-                        salesDetail.SpecialOfferId,
-                        salesDetail.ProductId,
-                        salesDetail.LineTotal
-                    })
-                    .GroupBy(p => new { p.SpecialOfferId, p.ProductId })
-                    .Select(g => new
-                    {
-                        Name = g.Key,
-                        LineTotal = g.Sum(x => x.LineTotal)
-                    })
-                    .OrderByDescending(p => p.LineTotal)
-                    .GroupBy(p => p.Name.SpecialOfferId)
-                    .Select(g => new
-                    {
-                        Name = g.Key,
-                        Product = g.First().Name.ProductId,
-                        LineTotal = g.Max(x => x.LineTotal),
-                    })
-                .Join(spetialOfferColl, x => x.Name, y => y.SpecialOfferId, (x, y) => new { x.Name, y.Description, x.LineTotal, x.Product })
-                .Join(productColl, x => x.Product, y => y.ProductId, (x, y) => new { x.Name,x.Description, y.ProductName, x.LineTotal, x.Product })
-                     .OrderByDescending(p => p.LineTotal)
-                     .Where(p => p.LineTotal >= Limit).ToListAsync();
-            //.Select(p => new { p.Name, p.Product, p.LineTotal }).ToListAsync();
-
-
-            ConsoleEx.WriteLine("\tUsing LINQ with Lookup", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId}{ProductName} {MaxTotal}");
-
-            foreach (var e in query)
-            {
-                ConsoleEx.WriteLine(
-                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
-                    $"{e.Description.PadRight(Description.Length)}" +
-                    $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
-                    $" {e.ProductName.PadLeft(ProductName.Length)} " +
-                    $"{e.LineTotal:N2}", ConsoleColor.Yellow);
             }
         }
 
