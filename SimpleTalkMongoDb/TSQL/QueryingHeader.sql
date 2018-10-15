@@ -1,11 +1,9 @@
-﻿--Top n per group problem
+﻿--The top N per Group Problem.
 --Let's find top one customer per territory that has the greatest TotalDue
 --and then limit the result to those territories and customers where sum of TotalDue is greater than the Limit
 --The result should be sorted on Sum of TotalDue descending.
---The result should contain only three records.
 
 ---1. Using cross apply in the Master table
---  Find max-min customer per teritory 
 DECLARE @limit MONEY = 950000
 ;
 WITH x
