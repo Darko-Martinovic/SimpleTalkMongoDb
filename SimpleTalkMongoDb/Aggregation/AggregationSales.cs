@@ -2,11 +2,12 @@
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
+using SimpleTalkMongoDb.Configuration;
+using SimpleTalkMongoDb.Pocos;
+
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SimpleTalkMongoDb.Configuration;
-using SimpleTalkMongoDb.Pocos;
 
 namespace SimpleTalkMongoDb.Aggregation
 {
@@ -14,7 +15,7 @@ namespace SimpleTalkMongoDb.Aggregation
     internal static class AggregationSales
     {
         /// <summary>
-        /// The first example
+        /// The example shows various way of aggregation.
         /// </summary>
         // ReSharper disable once UnusedMember.Global
         public static void Main()
@@ -25,13 +26,13 @@ namespace SimpleTalkMongoDb.Aggregation
 
 
         /// <summary>
-        ///
+        /// How to accomplished aggregation by using IAggregateFluent, LINQ & 'MongoShellLikeSyntax'
         /// </summary>
         /// <returns></returns>
         private static async Task MainAsync()
         {
 
-            
+
             await UsingIAggregateFluent(SampleConfig.Collection);
 
             await UsingLinq(SampleConfig.Collection);
@@ -39,7 +40,7 @@ namespace SimpleTalkMongoDb.Aggregation
             await UsingMongoShellLikeSyntax();
         }
 
-        
+
         /// <summary>
         /// Using IAggregateFluent
         /// </summary>
@@ -48,29 +49,22 @@ namespace SimpleTalkMongoDb.Aggregation
         private static async Task UsingIAggregateFluent(IMongoCollection<SalesHeader> collection)
         {
 
-            // Let's aggregate
-            var query =  collection.Aggregate()
-                // First group by TerritoryId plus CustomerId
-                .Group(x => new {x.TerritoryId, x.CustomerId},
-                    g => new {TerritoryIdCustomerId = g.Key, TotalDue = g.Sum(x => x.TotalDue)})
-                // Sort by TotalDue
+            var query = collection.Aggregate()
+                .Group(x => new { x.TerritoryId, x.CustomerId },
+                    g => new { TerritoryIdCustomerId = g.Key, TotalDue = g.Sum(x => x.TotalDue) })
                 .SortBy(x => x.TotalDue)
-                // Group again by TerritoryId in oder to find Last value per group
                 .Group(x => x.TerritoryIdCustomerId.TerritoryId, g => new
                 {
                     TerritoryId = g.Key,
                     MaxCustomer = g.Last().TerritoryIdCustomerId.CustomerId,
                     MaxTotal = g.Last().TotalDue
                 })
-                // Filter in order to get only Territories that has customer with more than is provided by limit
                 .Match(x => x.MaxTotal > Limit)
-                // Display result 
                 .Project(x => new
                 {
                     x.TerritoryId,
-                    MaxCust = new {Id = x.MaxCustomer, Total = x.MaxTotal},
+                    MaxCust = new { Id = x.MaxCustomer, Total = x.MaxTotal },
                 })
-                // Sort again by descaning TotalDue
                 .SortByDescending(x => x.MaxCust.Total);
 
             //var queryToExplain = query.ToString();
@@ -156,7 +150,6 @@ namespace SimpleTalkMongoDb.Aggregation
         /// <returns></returns>
         private static async Task UsingMongoShellLikeSyntax()
         {
-// USING STRING PARSER
             var group = new BsonDocument
             {
                 {
@@ -247,7 +240,7 @@ namespace SimpleTalkMongoDb.Aggregation
             };
 
 
-            var pipelineLast = new[] {group, sort, group2, sort2, limit, project,};
+            var pipelineLast = new[] { group, sort, group2, sort2, limit, project, };
 
 
             var collectionLast = SampleConfig.Collection;
@@ -265,7 +258,7 @@ namespace SimpleTalkMongoDb.Aggregation
             {
                 ConsoleEx.WriteLine(
                     $"{example.GetElement("TerritoryId").Value.ToString().PadRight(TerId.Length)} {example.GetElement("Customer").Value.ToString().PadRight(MaxCustoId.Length)} " +
-                    $"{((decimal) example.GetElement("Total").Value):N2}", ConsoleColor.Yellow);
+                    $"{((decimal)example.GetElement("Total").Value):N2}", ConsoleColor.Yellow);
             }
 
             //
