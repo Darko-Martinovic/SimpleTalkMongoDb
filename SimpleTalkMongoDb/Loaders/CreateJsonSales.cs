@@ -1,13 +1,8 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.IO;
-
-using SimpleTalkMongoDb.Configuration;
-
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using SimpleTalkMongoDb.Pocos;
 
@@ -32,7 +27,7 @@ namespace SimpleTalkMongoDb.Loaders
         private static void Worker()
 
         {
-            var ds = GetDataSet();
+            var ds = Common.GetDataSet();
 
 
             var counter = ds.Tables[0].Rows.Count;
@@ -139,38 +134,6 @@ namespace SimpleTalkMongoDb.Loaders
             return i;
         }
 
-        private static DataSet GetDataSet()
-        {
-            var ds = new DataSet();
-
-            var sql = SampleConfig.TsqlSales;
-
-            using (var cnn = new SqlConnection(SampleConfig.ConnectionString))
-            {
-                try
-                {
-                    cnn.Open();
-                    using (var cmd = new SqlCommand(sql, cnn))
-                    {
-                        using (var a = new SqlDataAdapter(cmd))
-                        {
-                            a.Fill(ds);
-                        }
-                    }
-
-                    cnn.Close();
-                }
-                catch (Exception ex)
-                {
-                    if (Debugger.IsAttached)
-                        Debugger.Break();
-                    Console.WriteLine($"Exception : {ex.Message}");
-                    Console.ReadLine();
-                }
-            }
-
-            return ds;
-        }
         //private static void Worker2()
         //{
         //    var ds = GetDataSet();

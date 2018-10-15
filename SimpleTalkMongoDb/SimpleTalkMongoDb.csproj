@@ -95,6 +95,7 @@
     <Compile Include="Filtering\Explain.cs" />
     <Compile Include="Filtering\FilterHeader.cs" />
     <Compile Include="Filtering\FindWithCursor.cs" />
+    <Compile Include="Loaders\Common.cs" />
     <Compile Include="Loaders\CreateJsonProducts.cs" />
     <Compile Include="Loaders\CreateJsonSpetialOffer.cs" />
     <Compile Include="Pocos\Person.cs" />
