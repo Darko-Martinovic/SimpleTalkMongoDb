@@ -65,7 +65,7 @@ namespace SimpleTalkMongoDb.Authentication
             ConsoleEx.WriteLine("In order to prove that we are successfully connected, let's count the number of documents in the 'adventureWorks2016' collection.", ConsoleColor.Cyan);
             ConsoleEx.WriteLine($"Number of documents : {numberOfDocuments}/{numberOfDocument2}/{numberOfDocuments3}", ConsoleColor.Yellow);
             ConsoleEx.WriteLine($"I did not find useful commands in the mongo shell to display active connections.", ConsoleColor.Red);
-            ConsoleEx.WriteLine("'db.serverStatus().connection' will help, but in the resulting document, there is no detailed information about connections");
+            ConsoleEx.WriteLine("'db.serverStatus().connections' will help, but in the resulting document, there is no detailed information about connections");
             ConsoleEx.WriteLine("'netstat –b' will helps too!");
             Console.ReadLine();
         }
