@@ -6,12 +6,9 @@ public static class ConsoleEx
         ConsoleColor bc = ConsoleColor.Black)
     {
 
-        var oldColor = Console.ForegroundColor;
-        var oldBack = Console.BackgroundColor;
         Console.ForegroundColor = cc;
         Console.BackgroundColor = bc;
         Console.WriteLine(message);
-        Console.ForegroundColor = oldColor;
-        Console.BackgroundColor = oldBack;
+        Console.ResetColor();
     }
 }
