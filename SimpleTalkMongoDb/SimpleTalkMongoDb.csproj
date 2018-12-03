@@ -115,7 +115,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <EmbeddedResource Include="Data\Sales.json" />
-    <EmbeddedResource Include="Data\MongoImport.cmd" />
+    <EmbeddedResource Include="Data\MongoImports.cmd" />
     <EmbeddedResource Include="Data\SpetailOffer.json" />
     <EmbeddedResource Include="Data\Product.json" />
     <None Include="packages.config" />
