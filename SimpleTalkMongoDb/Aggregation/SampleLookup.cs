@@ -1,10 +1,13 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+
+using SimpleTalkMongoDb.Configuration;
+using SimpleTalkMongoDb.Pocos;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SimpleTalkMongoDb.Configuration;
-using SimpleTalkMongoDb.Pocos;
 
 namespace SimpleTalkMongoDb.Aggregation
 {
@@ -23,11 +26,16 @@ namespace SimpleTalkMongoDb.Aggregation
         //
         private static async Task MainAsync()
         {
-            // Define a couple of names
+            await TestLookup(SampleConfig.DbSampleLookup);
+        }
+
+        private static async Task TestLookup(IMongoDatabase db)
+        {
+// Define a couple of names
             var names = new[]
             {
-                new Person { FirstName = "Rita"},
-                new Person { FirstName = "Katarina" }
+                new Person {FirstName = "Rita"},
+                new Person {FirstName = "Katarina"}
             };
             // Define a couple of meanings
             var meanings = new[]
@@ -43,7 +51,7 @@ namespace SimpleTalkMongoDb.Aggregation
                     Definition = @"In Greek the meaning of the name Katarina is: Pure."
                 }
             };
-            var db = SampleConfig.DbSampleLookup;
+            
             var collPerson = SampleConfig.CollPerson;
             var collNameMeaning = SampleConfig.CollMeanings;
             // drop collections 
@@ -54,22 +62,21 @@ namespace SimpleTalkMongoDb.Aggregation
             collNameMeaning.InsertMany(meanings);
             // Make lookup 
             var result = await collPerson.Aggregate()
-                .Lookup<Person, NameMeaning, LookedUpPerson>(collNameMeaning, 
-                    x => x.FirstName, 
+                .Lookup<Person, NameMeaning, LookedUpPerson>(collNameMeaning,
+                    x => x.FirstName,
                     y => y.Name,
                     x => x.Meanings
-            ).ToListAsync();
+                ).ToListAsync();
 
-            ConsoleEx.WriteLine("The name is written in red and the name's meaning in cyan ( the meaning is taken from the second collection)", ConsoleColor.Yellow);
+            ConsoleEx.WriteLine(
+                "The name is written in red and the name's meaning in cyan ( the meaning is taken from the second collection)",
+                ConsoleColor.Yellow);
             foreach (var example in result)
             {
                 ConsoleEx.WriteLine($"{example.FirstName.PadRight(10)}", ConsoleColor.Red);
                 ConsoleEx.WriteLine($"{example.Meanings.ElementAt(0).Definition}", ConsoleColor.Cyan);
-                ConsoleEx.WriteLine(" ".PadRight(70,'-'));
+                ConsoleEx.WriteLine(" ".PadRight(70, '-'));
             }
-
         }
-
-     
     }
 }
