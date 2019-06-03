@@ -1,5 +1,5 @@
 # SimpleTalkMongoDb
-Programming MongoDB by using .NET driver
+Programming MongoDB v4.0.9 by using .NET driver v2.7 & .NET framework 4.8. 
 
 ## :white_check_mark: Aggregation
 
