@@ -10,8 +10,9 @@ namespace SimpleTalkMongoDb.Filtering
 {
     internal static class FilterDetailTest
     {
-        // ReSharper disable once UnusedMember.Global
-        // ReSharper disable once UnusedParameter.Global
+        // Query for a Document Nested in an Array. Based on MongoDB example 
+        // https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
+        // Find documents that have WareHouse equal to A and the quantity equal 5
         public static void Main(string[] args)
         {
             MainAsync().Wait();
@@ -28,26 +29,28 @@ namespace SimpleTalkMongoDb.Filtering
         {
             var documents = new[]
             {
-                // The first document 
+                //
+                // Creating a couple of documents. Note the concrete data is a little bit different than in MongoDB example
+                //
                 new Items
                 {
-                    Item = "journal", Instock = new List<Instock> {new Instock("A", 5), new Instock("C", 15)}
+                    Item = "journal", Details = new List<Instock> {new Instock("A", 5), new Instock("C", 15)}
                 },
                 new Items
                 {
-                    Item = "notebook", Instock = new List<Instock> {new Instock("C", 5)}
+                    Item = "notebook", Details = new List<Instock> {new Instock("C", 5)}
                 },
                 new Items
                 {
-                    Item = "paper", Instock = new List<Instock> {new Instock("A", 60), new Instock("B", 15)}
+                    Item = "paper", Details = new List<Instock> {new Instock("A", 60), new Instock("B", 15)}
                 },
                 new Items
                 {
-                    Item = "planner", Instock = new List<Instock> {new Instock("A", 40), new Instock("B", 5)}
+                    Item = "planner", Details = new List<Instock> {new Instock("A", 40), new Instock("B", 5)}
                 },
                 new Items
                 {
-                    Item = "postcard", Instock = new List<Instock> {new Instock("B", 15), new Instock("C", 35)}
+                    Item = "postcard", Details = new List<Instock> {new Instock("B", 15), new Instock("A", 5)}
                 },
 
 
@@ -58,8 +61,25 @@ namespace SimpleTalkMongoDb.Filtering
             collItems.InsertMany(documents);
 
 
-            var filter = await collItems.Aggregate().Unwind<Items, Instock>(x => x.Instock).ToListAsync();
-            var test = "";
+           
+
+
+            var list = await collItems.Aggregate().Unwind<Items, InStockHelper>(x => x.Details)
+                .Project(x => new {x.Item, x.Details.WareHouse, x.Details.Qty})
+                .Match(x => x.WareHouse == "A" && x.Qty == 5)
+                .Project(x => new {x.Item}).ToListAsync();
+
+            ConsoleEx.WriteLine("Using MongoDB aggregation framework UnWind + Match", ConsoleColor.DarkYellow);
+            Console.WriteLine();
+            ConsoleEx.WriteLine("Find out all items in WareHouse 'A' with quantity 5", ConsoleColor.Magenta);
+            ConsoleEx.WriteLine("------------------------------------------------------", ConsoleColor.DarkYellow);
+            foreach (var e in list)
+            {
+               ConsoleEx.WriteLine(e.Item,ConsoleColor.Blue );
+            }
+
+
+            Console.WriteLine();
 
 
         }

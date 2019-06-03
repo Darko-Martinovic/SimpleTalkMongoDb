@@ -12,9 +12,18 @@ namespace SimpleTalkMongoDb.Pocos
     {
         public ObjectId Id { get; set; }
         public string Item;
-        public List<Instock> Instock { get; set; }
+        public List<Instock> Details { get; set; }
     }
 
+    public class InStockHelper
+    {
+
+        public Instock Details { get; set; }
+        public string Item { get; set; }
+
+
+
+    }
     public class Instock
     {
         public Instock(string wWare, int qty)
