@@ -41,6 +41,7 @@ Class Name                                       | Description
 -------------------------------------------------|---------------------------------------------------------------------------------
 Explain                                          | Shows how to get the query plan from the code.
 FilterHeader                                     | Shows various way to query MongoDB documents.
+FilterDetails                                    | Shows how to query for a documement nested in an array
 FindWithCursor                                   | Shows how to use cursors
 
 ## :white_check_mark: Loaders
