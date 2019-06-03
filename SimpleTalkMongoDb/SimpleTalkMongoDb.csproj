@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>SimpleTalkMongoDb</RootNamespace>
     <AssemblyName>SimpleTalkMongoDb</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -20,6 +20,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.Filtering.FilterDetailTest</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Filtering.FilterDetail</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -93,7 +94,7 @@
     <Compile Include="CRUD operations\CrudDemo.cs" />
     <Compile Include="Extension\ConsoleEx.cs" />
     <Compile Include="Filtering\Explain.cs" />
-    <Compile Include="Filtering\FilterDetailTest.cs" />
+    <Compile Include="Filtering\FilterDetail.cs" />
     <Compile Include="Filtering\FilterHeader.cs" />
     <Compile Include="Filtering\FindWithCursor.cs" />
     <Compile Include="Loaders\Common.cs" />

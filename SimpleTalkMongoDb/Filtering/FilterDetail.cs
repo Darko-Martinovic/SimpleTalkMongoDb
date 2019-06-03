@@ -8,7 +8,7 @@ using SimpleTalkMongoDb.Pocos;
 
 namespace SimpleTalkMongoDb.Filtering
 {
-    internal static class FilterDetailTest
+    internal static class FilterDetail
     {
         // Query for a Document Nested in an Array. Based on MongoDB example 
         // https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
@@ -21,11 +21,11 @@ namespace SimpleTalkMongoDb.Filtering
 
         private static async Task MainAsync()
         {
-            await FilterDetail(SampleConfig.DbSampleLookup);
+            await FilterDetailTest(SampleConfig.DbSampleLookup);
 
         }
 
-        private static async Task FilterDetail(IMongoDatabase dbSampleLookup)
+        private static async Task FilterDetailTest(IMongoDatabase dbSampleLookup)
         {
             var documents = new[]
             {
