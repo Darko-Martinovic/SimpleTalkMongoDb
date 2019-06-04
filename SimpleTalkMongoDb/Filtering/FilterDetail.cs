@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 
@@ -20,12 +21,6 @@ namespace SimpleTalkMongoDb.Filtering
         }
 
         private static async Task MainAsync()
-        {
-            await FilterDetailTest(SampleConfig.DbSampleLookup);
-
-        }
-
-        private static async Task FilterDetailTest(IMongoDatabase dbSampleLookup)
         {
             var documents = new[]
             {
@@ -57,11 +52,18 @@ namespace SimpleTalkMongoDb.Filtering
             };
 
             var collItems = SampleConfig.CollItems;
-            dbSampleLookup.DropCollection(collItems.CollectionNamespace.CollectionName);
+            SampleConfig.DbSampleLookup.DropCollection(collItems.CollectionNamespace.CollectionName);
             collItems.InsertMany(documents);
 
 
-           
+            await UsingIAggregateFluent(collItems, documents);
+            await UsingLinq(collItems, documents);
+        }
+
+
+        private static async Task UsingIAggregateFluent(IMongoCollection<Items> collItems, IEnumerable<Items> documents)
+        {
+
 
 
             var list = await collItems.Aggregate().Unwind<Items, InStockHelper>(x => x.Details)
@@ -75,7 +77,7 @@ namespace SimpleTalkMongoDb.Filtering
             ConsoleEx.WriteLine("------------------------------------------------------", ConsoleColor.DarkYellow);
             foreach (var e in list)
             {
-               ConsoleEx.WriteLine(e.Item,ConsoleColor.Blue );
+                ConsoleEx.WriteLine(e.Item, ConsoleColor.Blue);
             }
 
 
@@ -83,5 +85,32 @@ namespace SimpleTalkMongoDb.Filtering
 
 
         }
+
+        private static async Task UsingLinq(IMongoCollection<Items> collItems, IEnumerable<Items> documents)
+        {
+
+            var list = await (collItems.AsQueryable()
+                .SelectMany(p => p.Details, (p, det) => new
+                {
+                    det.WareHouse,
+                    det.Qty,
+                    p.Item
+                }).Where(x => x.WareHouse == "A" && x.Qty == 5).ToListAsync());
+
+            ConsoleEx.WriteLine("Using MongoDB Linq", ConsoleColor.DarkYellow);
+            Console.WriteLine();
+            ConsoleEx.WriteLine("Find out all items in WareHouse 'A' with quantity 5", ConsoleColor.Magenta);
+            ConsoleEx.WriteLine("------------------------------------------------------", ConsoleColor.DarkYellow);
+            foreach (var e in list)
+            {
+                ConsoleEx.WriteLine(e.Item.ToString(), ConsoleColor.Blue);
+            }
+
+
+            Console.WriteLine();
+
+        }
+
+
     }
 }
