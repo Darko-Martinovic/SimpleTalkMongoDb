@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using SimpleTalkMongoDb.Configuration;
@@ -56,12 +55,12 @@ namespace SimpleTalkMongoDb.Filtering
             collItems.InsertMany(documents);
 
 
-            await UsingIAggregateFluent(collItems, documents);
-            await UsingLinq(collItems, documents);
+            await UsingIAggregateFluent(collItems);
+            await UsingLinq(collItems);
         }
 
 
-        private static async Task UsingIAggregateFluent(IMongoCollection<Items> collItems, IEnumerable<Items> documents)
+        private static async Task UsingIAggregateFluent(IMongoCollection<Items> collItems)
         {
 
 
@@ -86,7 +85,7 @@ namespace SimpleTalkMongoDb.Filtering
 
         }
 
-        private static async Task UsingLinq(IMongoCollection<Items> collItems, IEnumerable<Items> documents)
+        private static async Task UsingLinq(IMongoCollection<Items> collItems)
         {
 
             var list = await (collItems.AsQueryable()
@@ -103,7 +102,7 @@ namespace SimpleTalkMongoDb.Filtering
             ConsoleEx.WriteLine("------------------------------------------------------", ConsoleColor.DarkYellow);
             foreach (var e in list)
             {
-                ConsoleEx.WriteLine(e.Item.ToString(), ConsoleColor.Blue);
+                ConsoleEx.WriteLine(e.Item, ConsoleColor.Blue);
             }
 
 
