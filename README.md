@@ -40,8 +40,9 @@ CrudDemo                                         | Shows how to performs basics 
 Class Name                                       | Description
 -------------------------------------------------|---------------------------------------------------------------------------------
 Explain                                          | Shows how to get the query plan from the code.
-FilterHeader                                     | Shows various way to query MongoDB documents.
 FilterDetails                                    | Shows how to query for a documement nested in an array
+FilterForNullOrMissingFields                     | Shows hot wo query for Null or Missing Fields
+FilterHeader                                     | Shows various way to query MongoDB documents.
 FindWithCursor                                   | Shows how to use cursors
 
 ## :white_check_mark: Loaders
