@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.Filtering.FilterForNullOrMissingFields</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Filtering.FilterNestedDocuments</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -97,10 +97,12 @@
     <Compile Include="Filtering\FilterDetail.cs" />
     <Compile Include="Filtering\FilterForNullOrMissingFields.cs" />
     <Compile Include="Filtering\FilterHeader.cs" />
+    <Compile Include="Filtering\FilterNestedDocuments.cs" />
     <Compile Include="Filtering\FindWithCursor.cs" />
     <Compile Include="Loaders\Common.cs" />
     <Compile Include="Loaders\CreateJsonProducts.cs" />
     <Compile Include="Loaders\CreateJsonSpetialOffer.cs" />
+    <Compile Include="Pocos\Inventory.cs" />
     <Compile Include="Pocos\Items.cs" />
     <Compile Include="Pocos\Person.cs" />
     <Compile Include="Pocos\Product.cs" />

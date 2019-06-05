@@ -88,13 +88,13 @@ namespace SimpleTalkMongoDb.Filtering
         private static async Task UsingLinq(IMongoCollection<Items> collItems)
         {
 
-            var list = await (collItems.AsQueryable()
+            var list = await collItems.AsQueryable()
                 .SelectMany(p => p.Details, (p, det) => new
                 {
                     det.WareHouse,
                     det.Qty,
                     p.Item
-                }).Where(x => x.WareHouse == "A" && x.Qty == 5).ToListAsync());
+                }).Where(x => x.WareHouse == "A" && x.Qty == 5).ToListAsync();
 
             ConsoleEx.WriteLine("Using MongoDB Linq", ConsoleColor.DarkYellow);
             Console.WriteLine();

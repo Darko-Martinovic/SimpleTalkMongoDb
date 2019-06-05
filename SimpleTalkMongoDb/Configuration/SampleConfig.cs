@@ -44,6 +44,7 @@ namespace SimpleTalkMongoDb.Configuration
                 CollPerson = DbSampleLookup.GetCollection<Person>(ConfigurationManager.AppSettings["MongoPersons"]);
                 CollItems = DbSampleLookup.GetCollection<Items>(ConfigurationManager.AppSettings["MongoItems"]);
                 CollNullNonExistingElements = DbSampleLookup.GetCollection<Tester>(ConfigurationManager.AppSettings["MongoNullOrNonExisting"]);
+                CollInventory = DbSampleLookup.GetCollection<Inventory>(ConfigurationManager.AppSettings["MongoInventory"]);
                 CollMeanings = DbSampleLookup.GetCollection<NameMeaning>(ConfigurationManager.AppSettings["MongoMeanings"]);
 
                 // T-SQL statements used to generate JSON files
@@ -80,6 +81,8 @@ namespace SimpleTalkMongoDb.Configuration
         public static IMongoCollection<Items> CollItems { get; set; }
 
         public static IMongoCollection<Tester> CollNullNonExistingElements { get; set; }
+
+        public static IMongoCollection<Inventory> CollInventory { get; set; }
 
 
         public static IMongoCollection<NameMeaning> CollMeanings { get; set; }
