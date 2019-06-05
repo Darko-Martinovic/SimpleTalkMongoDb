@@ -13,7 +13,7 @@ namespace SimpleTalkMongoDb.Filtering
     {
         // Query for Null or Missing Fields. Based on MongoDB example 
         // https://docs.mongodb.com/manual/tutorial/query-for-null-fields/
-        // Use BsonNull.Value with the MongoDB C# driver to query for null or missing fields in MongoDB.
+        // Use BsonNull.Value with the MongoDB C# driver to query for null and C# null ( VB.NET Nothing ) for missing fields in MongoDB.
         public static void Main(string[] args)
         {
             MainAsync().Wait();
