@@ -41,8 +41,9 @@ Class Name                                       | Description
 -------------------------------------------------|---------------------------------------------------------------------------------
 Explain                                          | Shows how to get the query plan from the code.
 FilterDetails                                    | Shows how to query for a documement nested in an array
-FilterForNullOrMissingFields                     | Shows hot wo query for Null or Missing Fields
+FilterForNullOrMissingFields                     | Shows how to query for Null or Missing Fields
 FilterHeader                                     | Shows various way to query MongoDB documents.
+FilterNestedDocuments                            | Shows how to query nested documents. 
 FindWithCursor                                   | Shows how to use cursors
 
 ## :white_check_mark: Loaders
