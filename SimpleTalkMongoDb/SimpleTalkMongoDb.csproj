@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>SimpleTalkMongoDb.Filtering.FilterDetail</StartupObject>
+    <StartupObject>SimpleTalkMongoDb.Filtering.FilterForNullOrMissingFields</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DnsClient, Version=1.0.7.0, Culture=neutral, PublicKeyToken=4574bb5573c51424, processorArchitecture=MSIL">
@@ -95,6 +95,7 @@
     <Compile Include="Extension\ConsoleEx.cs" />
     <Compile Include="Filtering\Explain.cs" />
     <Compile Include="Filtering\FilterDetail.cs" />
+    <Compile Include="Filtering\FilterForNullOrMissingFields.cs" />
     <Compile Include="Filtering\FilterHeader.cs" />
     <Compile Include="Filtering\FindWithCursor.cs" />
     <Compile Include="Loaders\Common.cs" />

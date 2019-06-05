@@ -34,4 +34,10 @@ namespace SimpleTalkMongoDb.Pocos
         public string WareHouse { get; set; }
         public int Qty { get; set; }
     }
+
+    public class Tester
+    {
+        public int Id { get; set; }
+        public object Item { get; set; }
+    }
 }
