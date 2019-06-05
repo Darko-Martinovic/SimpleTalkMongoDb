@@ -77,7 +77,7 @@ namespace SimpleTalkMongoDb.Filtering
 
         private static async Task UsingIFindFluentNonExisting(IMongoCollection<Tester> collItems)
         {
-            var list = await (collItems.Find(x => x.Item == null)).ToListAsync();
+            var list = await collItems.Find(x => x.Item == null).ToListAsync();
 
             ConsoleEx.WriteLine("Using IFindFluent", ConsoleColor.DarkYellow);
             Console.WriteLine();
@@ -93,7 +93,7 @@ namespace SimpleTalkMongoDb.Filtering
 
         private static async Task UsingLinqNonExisting(IMongoCollection<Tester> collItems)
         {
-            var list = await (collItems.AsQueryable().Where(x => x.Item == null)).ToListAsync();
+            var list = await collItems.AsQueryable().Where(x => x.Item == null).ToListAsync();
 
             ConsoleEx.WriteLine("Using MongoDB Linq", ConsoleColor.DarkYellow);
             Console.WriteLine();
