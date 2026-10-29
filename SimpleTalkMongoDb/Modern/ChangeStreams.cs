@@ -45,10 +45,11 @@ namespace SimpleTalkMongoDb.Modern
             var events = new List<ChangeStreamDocument<BsonDocument>>();
             using (var cursor = await offers.WatchAsync(pipeline, options))
             {
-                // Another writer, as another application would be; the stream is already open
-                var writer = WriteAsync(offers);
+                // The stream is open, so the changes made from now on wait for it, as they would for
+                // an application watching while another one writes. Writing first means a failed write
+                // reports its own error rather than a stream that times out waiting
+                await WriteAsync(offers);
                 events.AddRange(await ReadAsync(cursor, expected: 3));
-                await writer;
             }
 
             foreach (var e in events)

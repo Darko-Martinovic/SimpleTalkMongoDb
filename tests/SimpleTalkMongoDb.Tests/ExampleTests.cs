@@ -70,13 +70,22 @@ public sealed class ExampleTests(MongoFixture mongo) : IClassFixture<MongoFixtur
     [InlineData("modern-indexes", "territory_wildcard_details")]
     [InlineData("stable-api", "APIStrictError")]
     [InlineData("client-bulk-write", "deleted 1")]
-    [InlineData("transactions", "Order 2 for 10: aborted, only 3 in stock")]
     [InlineData("change-streams", "before: { \"_id\" : 1, \"description\" : \"Autumn sale\", \"discountPct\" : 15 }")]
     public async Task Example_finds_the_expected_result(string name, string expected)
     {
         var result = await App.RunAsync(name, mongo.ConnectionString);
 
         Assert.Contains(expected, result.Output);
+    }
+
+    [Fact]
+    public async Task A_rolled_back_order_leaves_no_trace()
+    {
+        var result = await App.RunAsync("transactions", mongo.ConnectionString);
+
+        // Order 2 was inserted inside the aborted transaction: it must be gone, and the stock as order 1 left it
+        var after = result.Output.Split('\n').Select(line => line.TrimEnd('\r')).Single(line => line.StartsWith("After trying to order 10"));
+        Assert.Equal("After trying to order 10: stock 3, orders: #1 x2", after);
     }
 
     [Fact]
