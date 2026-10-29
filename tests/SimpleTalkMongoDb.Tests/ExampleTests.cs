@@ -7,14 +7,20 @@ using Testcontainers.MongoDb;
 namespace SimpleTalkMongoDb.Tests;
 
 /// <summary>
-/// Starts MongoDB in a container, as a single-node replica set for the transaction and change
-/// stream examples, and seeds it once, for all the examples.
+/// Starts MongoDB in a container and seeds it once, for all the examples. The container is
+/// mongodb-atlas-local, as in compose.yaml: a single-node replica set (for transactions and change
+/// streams) with Atlas Search and Vector Search.
 /// </summary>
 public sealed class MongoFixture : IAsyncLifetime
 {
-    private readonly MongoDbContainer _mongo = new MongoDbBuilder("mongo:8.0").WithReplicaSet().Build();
+    // atlas-local sets up its own replica set and runs without access control
+    private readonly MongoDbContainer _mongo = new MongoDbBuilder("mongodb/mongodb-atlas-local:8.0")
+        .WithUsername(string.Empty)
+        .WithPassword(string.Empty)
+        .Build();
 
-    public string ConnectionString => _mongo.GetConnectionString();
+    // directConnection: the replica set's member name is only known inside the container
+    public string ConnectionString => new MongoDB.Driver.MongoUrlBuilder(_mongo.GetConnectionString()) { DirectConnection = true }.ToString();
 
     public async ValueTask InitializeAsync()
     {
@@ -70,6 +76,9 @@ public sealed class ExampleTests(MongoFixture mongo) : IClassFixture<MongoFixtur
     [InlineData("modern-indexes", "territory_wildcard_details")]
     [InlineData("stable-api", "APIStrictError")]
     [InlineData("client-bulk-write", "deleted 1")]
+    [InlineData("atlas-search", "Long-Sleeve Logo Jersey")]
+    [InlineData("vector-search", "Full-Finger Gloves")]
+    [InlineData("ef-core", "Updated #50: EF Core launch offer, extended")]
     [InlineData("change-streams", "before: { \"_id\" : 1, \"description\" : \"Autumn sale\", \"discountPct\" : 15 }")]
     public async Task Example_finds_the_expected_result(string name, string expected)
     {
