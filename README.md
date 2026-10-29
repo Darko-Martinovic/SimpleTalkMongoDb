@@ -170,3 +170,7 @@ The examples do what they did, on current versions. Where the article's code no 
 ## Data
 
 The sample data comes from Microsoft's AdventureWorks2016 sample database.
+
+## License
+
+[MIT](LICENSE)
