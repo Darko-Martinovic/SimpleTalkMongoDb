@@ -7,11 +7,12 @@ using Testcontainers.MongoDb;
 namespace SimpleTalkMongoDb.Tests;
 
 /// <summary>
-/// Starts MongoDB in a container and seeds it once, for all the examples.
+/// Starts MongoDB in a container, as a single-node replica set for the transaction and change
+/// stream examples, and seeds it once, for all the examples.
 /// </summary>
 public sealed class MongoFixture : IAsyncLifetime
 {
-    private readonly MongoDbContainer _mongo = new MongoDbBuilder("mongo:8.0").Build();
+    private readonly MongoDbContainer _mongo = new MongoDbBuilder("mongo:8.0").WithReplicaSet().Build();
 
     public string ConnectionString => _mongo.GetConnectionString();
 
@@ -69,6 +70,8 @@ public sealed class ExampleTests(MongoFixture mongo) : IClassFixture<MongoFixtur
     [InlineData("modern-indexes", "territory_wildcard_details")]
     [InlineData("stable-api", "APIStrictError")]
     [InlineData("client-bulk-write", "deleted 1")]
+    [InlineData("transactions", "Order 2 for 10: aborted, only 3 in stock")]
+    [InlineData("change-streams", "before: { \"_id\" : 1, \"description\" : \"Autumn sale\", \"discountPct\" : 15 }")]
     public async Task Example_finds_the_expected_result(string name, string expected)
     {
         var result = await App.RunAsync(name, mongo.ConnectionString);

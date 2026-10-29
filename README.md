@@ -128,6 +128,13 @@ Example | Class | Description
 `stable-api` | StableApi | A client on Stable API version 1, strict, and a command it refuses (5.0)
 `client-bulk-write` | ClientBulkWrite | One bulk write across two collections (8.0)
 
+These two need a replica set: the container in `compose.yaml` is one, a default local `mongod` is not (start it with `--replSet` and run `rs.initiate()` once).
+
+Example | Class | Description
+---|---|---
+`transactions` | Transactions | An order and its stock change committed together, and an order rolled back when the stock runs out, with `WithTransactionAsync` (4.0)
+`change-streams` | ChangeStreams | Inserts, updates and deletes as they happen, with the document before and after each change (6.0), and resuming from a token (3.6)
+
 The orders' dates are midnight Central European time, where the JSON files were exported, stored in UTC as 22:00 or 23:00 of the day before. The modern examples count days, months and years in that time zone (`SalesCalendar`), as `$dateTrunc` and the other date operators allow since 5.0; in UTC an order of the 1st would fall into the previous month.
 
 ## What changed since the article

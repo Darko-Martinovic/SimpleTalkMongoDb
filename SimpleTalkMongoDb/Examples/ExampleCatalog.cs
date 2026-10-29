@@ -20,6 +20,7 @@ namespace SimpleTalkMongoDb.Examples
     {
         public const string LoadersCategory = "Loaders (need SQL Server with AdventureWorks2016)";
         public const string ModernCategory = "Modern MongoDB (any MongoDB 8)";
+        public const string ReplicaSetCategory = "Modern MongoDB (needs a replica set)";
 
         public static IReadOnlyList<Example> All { get; } =
         [
@@ -56,6 +57,9 @@ namespace SimpleTalkMongoDb.Examples
             new("modern-indexes", ModernCategory, "Wildcard, hidden, compound wildcard, partial and TTL indexes, clustered collections", ModernIndexes.RunAsync),
             new("stable-api", ModernCategory, "The Stable API, strict (5.0)", StableApi.RunAsync),
             new("client-bulk-write", ModernCategory, "One bulk write across collections (8.0)", ClientBulkWrite.RunAsync),
+
+            new("transactions", ReplicaSetCategory, "Multi-document transactions with WithTransactionAsync (4.0)", Transactions.RunAsync),
+            new("change-streams", ReplicaSetCategory, "Change streams (3.6) with pre-images (6.0) and resuming", ChangeStreams.RunAsync),
 
             new("create-json-products", LoadersCategory, "Writes Product.json from AdventureWorks2016", CreateJsonProducts.RunAsync),
             new("create-json-sales", LoadersCategory, "Writes Sales.json from AdventureWorks2016", CreateJsonSales.RunAsync),
