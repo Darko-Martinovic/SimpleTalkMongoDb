@@ -30,6 +30,8 @@ You need the [.NET 10 SDK](https://dotnet.microsoft.com/download) and MongoDB 8.
    dotnet run --project SimpleTalkMongoDb -- list              # list them all
    ```
 
+MongoDB 8 refuses to start on Linux kernels 6.19 to 7.0.13 ([SERVER-121912](https://jira.mongodb.org/browse/SERVER-121912)); if the container exits at once, check `uname -r` on the host or in the Docker/Podman VM.
+
 Each example runs in a process of its own, as each had its own `Main` before: the serialization examples register class maps and conventions for the whole process.
 
 ## Configuration
