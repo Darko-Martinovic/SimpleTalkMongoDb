@@ -53,7 +53,8 @@ public sealed class ExampleTests(MongoFixture mongo) : IClassFixture<MongoFixtur
         Assert.True(result.ExitCode == 0, result.Output);
     }
 
-    // Results that show each way of querying still finds what the article shows
+    // Results that show each way of querying still finds what the article shows, and that the
+    // modern examples get their point across
     [Theory]
     [InlineData("aggregation-sales", "29818")]
     [InlineData("aggregation-unwind", "Touring-1000 Promotion")]
@@ -61,6 +62,13 @@ public sealed class ExampleTests(MongoFixture mongo) : IClassFixture<MongoFixtur
     [InlineData("filter-header", "69508")]
     [InlineData("find-with-cursor", "51711")]
     [InlineData("auth", "31465/31465/31465")]
+    [InlineData("top-n", "29818, 29617, 29580")]
+    [InlineData("gap-filling", "16 days with sales, 14 added")]
+    [InlineData("time-series", "31465 measurements")]
+    [InlineData("schema-validation", "Documents in 'validatedOffers': 1")]
+    [InlineData("modern-indexes", "territory_wildcard_details")]
+    [InlineData("stable-api", "APIStrictError")]
+    [InlineData("client-bulk-write", "deleted 1")]
     public async Task Example_finds_the_expected_result(string name, string expected)
     {
         var result = await App.RunAsync(name, mongo.ConnectionString);

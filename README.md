@@ -110,6 +110,26 @@ Example | Class | Description
 `create-json-sales` | CreateJsonSales | Writes Sales.json
 `create-json-special-offers` | CreateJsonSpecialOffer | Writes SpecialOffer.json
 
+## :white_check_mark: Modern MongoDB
+
+Features added to MongoDB since the article (4.0), on the same sales data. Each runs on any MongoDB 8, in the container or a local server. The version in brackets is the one that introduced the feature.
+
+Example | Class | Description
+---|---|---
+`pipeline-updates` | PipelineUpdates | Updates written as aggregation pipelines, computing fields from other fields (4.2)
+`merge-union` | MergeAndUnion | `$merge` keeping a monthly summary up to date (4.2); `$unionWith` reading two collections as one (4.4)
+`window-functions` | WindowFunctions | `$setWindowFields`: running totals, moving averages and row numbers per territory (5.0)
+`gap-filling` | GapFilling | `$densify` adds the days without sales (5.1), `$fill` gives them values (5.3)
+`top-n` | TopN | `$top`, `$topN` and `$maxN` in `$group`: `aggregation-sales` without the sort and `$last` (5.2)
+`percentiles` | Percentiles | `$median` and `$percentile` of order values (7.0)
+`time-series` | TimeSeries | A time series collection of the orders (5.0) with a secondary index (6.0)
+`schema-validation` | SchemaValidation | `$jsonSchema` validation (3.6) and the detailed reasons a write is rejected (5.0)
+`modern-indexes` | ModernIndexes | Wildcard (4.2), hidden (4.4), compound wildcard (7.0), partial and TTL indexes, clustered collections (5.3), with the query plans that use them
+`stable-api` | StableApi | A client on Stable API version 1, strict, and a command it refuses (5.0)
+`client-bulk-write` | ClientBulkWrite | One bulk write across two collections (8.0)
+
+The orders' dates are midnight Central European time, where the JSON files were exported, stored in UTC as 22:00 or 23:00 of the day before. The modern examples count days, months and years in that time zone (`SalesCalendar`), as `$dateTrunc` and the other date operators allow since 5.0; in UTC an order of the 1st would fall into the previous month.
+
 ## What changed since the article
 
 The examples do what they did, on current versions. Where the article's code no longer applies:
