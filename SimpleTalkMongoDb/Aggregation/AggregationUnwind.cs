@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -13,11 +13,7 @@ namespace SimpleTalkMongoDb.Aggregation
 {
     internal static class AggregationUnwind
     {
-        public static void Main()
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
 
         /// <summary>
@@ -75,14 +71,14 @@ namespace SimpleTalkMongoDb.Aggregation
 
 
             ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
+            Console.WriteLine($"{OfferIdHeader} {MaxProductId} {MaxTotal}");
 
             foreach (var d in queryMongo)
             {
                 //Console.WriteLine(d.ToJson(jsonWritter));
 
                 ConsoleEx.WriteLine(
-                    $"{d.SpecialOfferId.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $"{d.SpecialOfferId.ToString().PadRight(OfferIdHeader.Length)}" +
                     $" {d.Product.ToString().PadLeft(MaxProductId.Length)} " +
                     $"{d.LineTotal:N2}", ConsoleColor.Yellow);
             }
@@ -95,7 +91,7 @@ namespace SimpleTalkMongoDb.Aggregation
         /// <returns></returns>
         private static async Task UsingIAggregateFluentWithLookup(IMongoCollection<SalesHeader> collection)
         {
-            var otherCollection = SampleConfig.CollSpetialOffer;
+            var otherCollection = SampleConfig.CollSpecialOffer;
             var prodColl = SampleConfig.CollProducts;
 
             var queryMongo = await collection.Aggregate()
@@ -116,8 +112,8 @@ namespace SimpleTalkMongoDb.Aggregation
                     })
                 .SortByDescending(p => p.LineTotal)
                 .Match(x => x.LineTotal > Limit)
-                .Lookup<SalesDetail, SpetialOffer, Result>(otherCollection, x => x.SpecialOfferId, y => y.SpecialOfferId,
-                    x => x.SpetOffer)
+                .Lookup<SalesDetail, SpecialOffer, Result>(otherCollection, x => x.SpecialOfferId, y => y.SpecialOfferId,
+                    x => x.SpecialOffers)
                 .Lookup<Result, Product, ResultProduct>(prodColl, x => x.ProductId, y => y.ProductId,
                     x => x.ProductName
                 ).ToListAsync();
@@ -125,14 +121,14 @@ namespace SimpleTalkMongoDb.Aggregation
 
 
             ConsoleEx.WriteLine("\tUsing MongoDB Aggregation framework with Lookup", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId} {ProductName} {MaxTotal}");
+            Console.WriteLine($"{OfferIdHeader} {Description} {MaxProductId} {ProductName} {MaxTotal}");
 
             foreach (var d in queryMongo)
             {
                 ConsoleEx.WriteLine
                 (
-                    $"{d.Id.ToString().PadRight(SpetailOfferId.Length)} " +
-                    $"{d.SpetOffer.ElementAt(0).Description.Trim().PadRight(Description.Length)} " +
+                    $"{d.SpecialOfferId.ToString().PadRight(OfferIdHeader.Length)} " +
+                    $"{d.SpecialOffers.ElementAt(0).Description.Trim().PadRight(Description.Length)} " +
                     $"{d.ProductId.ToString().PadLeft(MaxProductId.Length)} " +
                     $"{d.ProductName.ElementAt(0).ProductName.Trim().PadLeft(ProductName.Length)} " +
                     $"{d.LineTotal:N2}",
@@ -175,12 +171,12 @@ namespace SimpleTalkMongoDb.Aggregation
 
 
             ConsoleEx.WriteLine("\tUsing LINQ", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
+            Console.WriteLine($"{OfferIdHeader} {MaxProductId} {MaxTotal}");
 
             foreach (var e in query)
             {
                 ConsoleEx.WriteLine(
-                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $"{e.Name.ToString().PadRight(OfferIdHeader.Length)}" +
                     $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
                     $"{e.LineTotal:N2}", ConsoleColor.Yellow);
             }
@@ -193,7 +189,7 @@ namespace SimpleTalkMongoDb.Aggregation
         /// <returns></returns>
         private static async Task UsingLinqWithLookup(IMongoCollection<SalesHeader> collection)
         {
-            var spetialOfferColl = SampleConfig.CollSpetialOffer;
+            var specialOfferColl = SampleConfig.CollSpecialOffer;
             var productColl = SampleConfig.CollProducts;
 
             var query = await collection.AsQueryable()
@@ -217,7 +213,7 @@ namespace SimpleTalkMongoDb.Aggregation
                         Product = g.First().Name.ProductId,
                         LineTotal = g.Max(x => x.LineTotal),
                     })
-                .Join(spetialOfferColl, x => x.Name, y => y.SpecialOfferId, (x, y) => new { x.Name, y.Description, x.LineTotal, x.Product })
+                .Join(specialOfferColl, x => x.Name, y => y.SpecialOfferId, (x, y) => new { x.Name, y.Description, x.LineTotal, x.Product })
                 .Join(productColl, x => x.Product, y => y.ProductId, (x, y) => new { x.Name,x.Description, y.ProductName, x.LineTotal, x.Product })
                      .OrderByDescending(p => p.LineTotal)
                      .Where(p => p.LineTotal >= Limit).ToListAsync();
@@ -225,12 +221,12 @@ namespace SimpleTalkMongoDb.Aggregation
 
 
             ConsoleEx.WriteLine("\tUsing LINQ with Lookup", ConsoleColor.Magenta);
-            Console.WriteLine($"{SpetailOfferId} {Description} {MaxProductId} {ProductName} {MaxTotal}");
+            Console.WriteLine($"{OfferIdHeader} {Description} {MaxProductId} {ProductName} {MaxTotal}");
 
             foreach (var e in query)
             {
                 ConsoleEx.WriteLine(
-                    $"{e.Name.ToString().PadRight(SpetailOfferId.Length)}" +
+                    $"{e.Name.ToString().PadRight(OfferIdHeader.Length)}" +
                     $"{e.Description.PadRight(Description.Length)}" +
                     $" {e.Product.ToString().PadLeft(MaxProductId.Length)} " +
                     $" {e.ProductName.PadLeft(ProductName.Length)} " +
@@ -294,21 +290,21 @@ namespace SimpleTalkMongoDb.Aggregation
 
             ConsoleEx.WriteLine("\tUsing MongoDB shell like coding - parsing BSonDocument", ConsoleColor.Magenta);
 
-            Console.WriteLine($"{SpetailOfferId} {MaxProductId} {MaxTotal}");
+            Console.WriteLine($"{OfferIdHeader} {MaxProductId} {MaxTotal}");
             foreach (var example in result)
             {
                 //Console.WriteLine(d.ToJson(jsonWritter));
                 ConsoleEx.WriteLine(
-                    $"{example.GetElement("SpecialOfferId").Value.ToString().PadRight(SpetailOfferId.Length)} " +
-                    $"{example.GetElement("Product").Value.ToString().PadLeft(MaxProductId.Length)} " +
+                    $"{$"{example.GetElement("SpecialOfferId").Value}".PadRight(OfferIdHeader.Length)} " +
+                    $"{$"{example.GetElement("Product").Value}".PadLeft(MaxProductId.Length)} " +
                     $"{((decimal)example.GetElement("Total").Value):N2}", ConsoleColor.Yellow);
             }
         }
 
-        private const string SpetailOfferId = "Offer ID";
+        private const string OfferIdHeader = "Offer ID";
         private const string MaxProductId = "Product ";
         private const string MaxTotal = "Total";
-        private const string Description = "Spetial Offer Description - Lookup Example";
+        private const string Description = "Special Offer Description - Lookup Example";
         private const string ProductName = "Product Name - Lookup Example ";
         private const decimal Limit = 200000;
     }

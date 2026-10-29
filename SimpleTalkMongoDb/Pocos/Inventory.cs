@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,10 +10,10 @@ namespace SimpleTalkMongoDb.Pocos
     public class Inventory
     {
         public ObjectId Id { get; set; }
-        public string Item;
-        public string Status;
+        public string Item = "";
+        public string Status = "";
         public int Qty;
-        public Size S;
+        public Size S = new();
     }
 
     public class Size

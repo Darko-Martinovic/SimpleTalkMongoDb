@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -21,9 +21,9 @@ namespace SimpleTalkMongoDb.Pocos
         //
         public byte Status { get; set; }
         public bool OnlineOrderFlag { get; set; }
-        public string SalesOrderNumber { get; set; }
-        public string PurchaseOrderNumber { get; set; }
-        public string AccountNumber { get; set; }
+        public string SalesOrderNumber { get; set; } = "";
+        public string? PurchaseOrderNumber { get; set; }
+        public string? AccountNumber { get; set; }
         //
         public int CustomerId { get; set; }
         public int SalesPersonId { get; set; }
@@ -33,7 +33,7 @@ namespace SimpleTalkMongoDb.Pocos
         //
         public int ShipMethodId { get; set; }
         public int CreditCardId { get; set; }
-        public string CreditCardApprovalCode { get; set; }
+        public string? CreditCardApprovalCode { get; set; }
         public int CurrencyRateId { get; set; }
 
         //BsonSerializer(typeof(CustomSerializationProvider))]
@@ -49,14 +49,14 @@ namespace SimpleTalkMongoDb.Pocos
         [BsonRepresentation(BsonType.Decimal128)]
         public decimal TotalDue { get; set; }
 
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
-        public string Rowguid { get; set; }
+        public string Rowguid { get; set; } = "";
         //
         public DateTime ModifiedDate { get; set; }
 
 
-        public List<SalesDetail> Details { get; set; }
+        public List<SalesDetail> Details { get; set; } = new();
 
     }
     [BsonIgnoreExtraElements]
@@ -64,7 +64,7 @@ namespace SimpleTalkMongoDb.Pocos
     {
 
         public int SalesOrderDetailId { get; set; }
-        public string CarrierTrackingNumber { get; set; }
+        public string? CarrierTrackingNumber { get; set; }
         public short OrderQty { get; set; }
         public int ProductId { get; set; }
         public int SpecialOfferId { get; set; }
@@ -78,7 +78,7 @@ namespace SimpleTalkMongoDb.Pocos
         [BsonRepresentation(BsonType.Decimal128)]
         public decimal LineTotal { get; set; }
 
-        public string Rowguid { get; set; }
+        public string Rowguid { get; set; } = "";
         //
         public DateTime ModifiedDate { get; set; }
 
@@ -89,7 +89,7 @@ namespace SimpleTalkMongoDb.Pocos
     public  class SalesDetailHelper
     {
 
-        public SalesDetail Details { get; set; }
+        public SalesDetail Details { get; set; } = null!;
 
 
 
@@ -99,7 +99,7 @@ namespace SimpleTalkMongoDb.Pocos
     {
   
         public int Id { get; set; }
-        public SalesDetail Details { get; set; }
+        public SalesDetail Details { get; set; } = null!;
 
 
 

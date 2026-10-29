@@ -1,0 +1,18 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet build SimpleTalkMongoDb.slnx
+      # The tests start MongoDB in a container with Testcontainers
+      - run: dotnet test --solution SimpleTalkMongoDb.slnx --no-build

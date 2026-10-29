@@ -1,10 +1,11 @@
-﻿using CreateMongoJson.Pocos;
+using CreateMongoJson.Pocos;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Bson.IO;
+using SimpleTalkMongoDb.Configuration;
 
 namespace SimpleTalkMongoDb.Serialization
 {
@@ -12,11 +13,7 @@ namespace SimpleTalkMongoDb.Serialization
     {
 
 
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
         private static async Task MainAsync()
         {
             var db = MongoDatabase(out var collection);
@@ -29,7 +26,7 @@ namespace SimpleTalkMongoDb.Serialization
 
         private static IMongoDatabase MongoDatabase(out IMongoCollection<SimplePoco> collection)
         {
-            var client = new MongoClient();
+            var client = SampleConfig.Client;
             var db = client.GetDatabase("Types");
             collection = db.GetCollection<SimplePoco>("Test");
             return db;
@@ -41,11 +38,12 @@ namespace SimpleTalkMongoDb.Serialization
 
             var ws = new JsonWriterSettings
             {
-               OutputMode = JsonOutputMode.Strict,
+               // Strict was removed in driver 3.0; relaxed extended JSON is its successor
+               OutputMode = JsonOutputMode.RelaxedExtendedJson,
                Indent = true
             };
             Console.WriteLine();
-            ConsoleEx.WriteLine("Outputing result using JsonOutputMode.Strict", ConsoleColor.Red);
+            ConsoleEx.WriteLine("Outputing result using JsonOutputMode.RelaxedExtendedJson", ConsoleColor.Red);
             Console.WriteLine();
             foreach (var e in result)
             {

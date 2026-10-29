@@ -1,27 +1,27 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
+using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 
 namespace SimpleTalkMongoDb.Loaders
 {
     public static class CreateJsonProducts
     {
-        public static void Main(string[] args)
+        public static Task RunAsync()
         {
             var t1 = DateTime.Now;
             Worker();
             var ts = DateTime.Now - t1;
             Console.WriteLine($"Total time elapsed {ts.Hours}:{ts.Minutes}:{ts.Seconds}");
-            Console.WriteLine("Press any key to exit!");
-            Console.ReadLine();
+            return Task.CompletedTask;
         }
         private static void Worker()
 
         {
-            var ds = Common.GetDataSet();
+            var ds = Common.GetDataSet(SampleConfig.TsqlProducts);
 
 
             var counter = ds.Tables[0].Rows.Count;
@@ -39,12 +39,12 @@ namespace SimpleTalkMongoDb.Loaders
             }
             var ws = new JsonWriterSettings
             {
-                OutputMode = JsonOutputMode.Strict,
+                OutputMode = JsonOutputMode.RelaxedExtendedJson,
                 Indent = true,
                 IndentChars = "\t"
 
             };
-            System.IO.File.WriteAllText(@"C:\tmp\Product.json", result.ToJson(ws));
+            System.IO.File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Product.json"), result.ToJson(ws));
         }
 
         private static Product ProductPoco(DataRow r)
@@ -53,9 +53,9 @@ namespace SimpleTalkMongoDb.Loaders
             var i = new Product()
             {
                 ProductId = (int)r["ProductID"],
-                ProductName = r["Name"].ToString(),
-                SubCategoryName= r["SubKategoryName"].ToString(),
-                Category = r["CategoryName"].ToString()
+                ProductName = r["Name"].ToString() ?? "",
+                SubCategoryName= r["SubKategoryName"].ToString() ?? "",
+                Category = r["CategoryName"].ToString() ?? ""
             };
 
             return i;

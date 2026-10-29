@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
 using System;
@@ -11,13 +11,7 @@ namespace SimpleTalkMongoDb.Filtering
     // ReSharper disable once UnusedMember.Global
     internal static class FilterHeader
     {
-        // ReSharper disable once UnusedMember.Global
-        // ReSharper disable once UnusedParameter.Global
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         /// <summary>
         /// How to find a document, using LINQ and IFindFluent
@@ -84,7 +78,7 @@ namespace SimpleTalkMongoDb.Filtering
 
             foreach (var e in list)
             {
-                Console.WriteLine($"{e.SalesOrderId.ToString().PadRight(SalesOrderId.Length)} " +
+                ConsoleEx.WriteLine($"{e.SalesOrderId.ToString().PadRight(SalesOrderId.Length)} " +
                                   $"{e.CustomerId.ToString().PadRight(CustomerId.Length)} " +
                                   $"{e.TotalDue:N2} " +
                                   $"{e.OrderDate.ToLocalTime():dd.MM.yyyy}", ConsoleColor.Yellow);
@@ -128,10 +122,10 @@ namespace SimpleTalkMongoDb.Filtering
 
             foreach (var e in list2)
             {
-                Console.WriteLine($"{e.SalesOrderId.ToString().PadRight(SalesOrderId.Length)} " +
+                ConsoleEx.WriteLine($"{e.SalesOrderId.ToString().PadRight(SalesOrderId.Length)} " +
                                   $"{e.CustomerId.ToString().PadRight(CustomerId.Length)} " +
                                   $"{e.TotalDue:N2} " +
-                                  $"{e.OrderDate.ToLocalTime():dd.MM.yyyyy}", ConsoleColor.Yellow);
+                                  $"{e.OrderDate.ToLocalTime():dd.MM.yyyy}", ConsoleColor.Yellow);
             }
         }
 

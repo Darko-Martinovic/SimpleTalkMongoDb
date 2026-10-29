@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 using System.Data;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 
 using SimpleTalkMongoDb.Configuration;
@@ -9,11 +9,9 @@ namespace SimpleTalkMongoDb.Loaders
 {
     static class Common
     {
-        public static DataSet GetDataSet()
+        public static DataSet GetDataSet(string sql)
         {
             var ds = new DataSet();
-
-            var sql = SampleConfig.TsqlProducts;
 
             using (var cnn = new SqlConnection(SampleConfig.ConnectionString))
             {
@@ -35,7 +33,6 @@ namespace SimpleTalkMongoDb.Loaders
                     if (Debugger.IsAttached)
                         Debugger.Break();
                     Console.WriteLine($"Exception : {ex.Message}");
-                    Console.ReadLine();
                 }
             }
 

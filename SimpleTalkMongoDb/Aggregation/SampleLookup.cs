@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -15,11 +15,7 @@ namespace SimpleTalkMongoDb.Aggregation
     {
 
 
-        public static void Main()
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         //
         //source: http://www.sheknows.com/baby-names

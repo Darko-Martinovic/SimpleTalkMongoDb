@@ -1,33 +1,32 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 
 
 namespace SimpleTalkMongoDb.Loaders
 {
-    internal static class Program
+    internal static class CreateJsonSales
     {
 
-        public static void Main(string[] args)
+        public static Task RunAsync()
         {
             var t1 = DateTime.Now;
             Worker();
             var ts = DateTime.Now - t1;
             Console.WriteLine($"Total time elapsed {ts.Hours}:{ts.Minutes}:{ts.Seconds}");
-            Console.WriteLine("Press any key to exit!");
-            //Worker2();
-            Console.ReadLine();
+            return Task.CompletedTask;
         }
 
 
         private static void Worker()
 
         {
-            var ds = Common.GetDataSet();
+            var ds = Common.GetDataSet(SampleConfig.TsqlSales);
 
 
             var counter = ds.Tables[0].Rows.Count;
@@ -51,14 +50,11 @@ namespace SimpleTalkMongoDb.Loaders
             }
             var ws = new JsonWriterSettings
             {
-                OutputMode = JsonOutputMode.Strict,
+                OutputMode = JsonOutputMode.RelaxedExtendedJson,
                 Indent = true,
                 IndentChars = "\t",
-                //NewLineChars = "\r\n", default
-                GuidRepresentation = GuidRepresentation.CSharpLegacy
-
             };
-            File.WriteAllText(@"C:\tmp\Sales.json", result.ToJson(ws));
+            File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Sales.json"), result.ToJson(ws));
         }
 
         private static void SalesDetailPocos(IEnumerable<DataRow> details, DataRow r, SalesHeader i)
@@ -74,7 +70,7 @@ namespace SimpleTalkMongoDb.Loaders
                     UnitPrice = (decimal) d["UnitPrice"],
                     UnitPriceDiscount = (decimal) d["UnitPriceDiscount"],
                     LineTotal = (decimal) d["LineTotal"],
-                    Rowguid = r["rowguid"].ToString(),
+                    Rowguid = r["rowguid"].ToString() ?? "",
                     ModifiedDate = (DateTime) r["ModifiedDate"]
                 };
 
@@ -112,7 +108,7 @@ namespace SimpleTalkMongoDb.Loaders
                 TaxAmt = (decimal) r["TaxAmt"],
                 Freight = (decimal) r["Freight"],
                 TotalDue = (decimal) r["TotalDue"],
-                Rowguid = r["rowguid"].ToString(),
+                Rowguid = r["rowguid"].ToString() ?? "",
                 ModifiedDate = (DateTime) r["ModifiedDate"]
             };
             if (!r.IsNull("PurchaseOrderNumber"))
@@ -139,7 +135,7 @@ namespace SimpleTalkMongoDb.Loaders
         //    var ds = GetDataSet();
         //    var ws = new JsonWriterSettings
         //    {
-        //        OutputMode = JsonOutputMode.Strict,
+        //        OutputMode = JsonOutputMode.RelaxedExtendedJson,
         //        Indent = true,
         //        IndentChars = "\t",
         //        //NewLineChars = "\r\n", default
@@ -175,7 +171,7 @@ namespace SimpleTalkMongoDb.Loaders
         //            TaxAmt = (decimal)r["TaxAmt"],
         //            Freight = (decimal)r["Freight"],
         //            TotalDue = (decimal)r["TotalDue"],
-        //            Rowguid = r["rowguid"].ToString(),
+        //            Rowguid = r["rowguid"].ToString() ?? "",
         //            ModifiedDate = (DateTime)r["ModifiedDate"]
         //        };
         //        if (!r.IsNull("PurchaseOrderNumber"))
@@ -211,7 +207,7 @@ namespace SimpleTalkMongoDb.Loaders
         //                UnitPrice = (decimal)d["UnitPrice"],
         //                UnitPriceDiscount = (decimal)d["UnitPriceDiscount"],
         //                LineTotal = (decimal)d["LineTotal"],
-        //                Rowguid = r["rowguid"].ToString(),
+        //                Rowguid = r["rowguid"].ToString() ?? "",
         //                ModifiedDate = (DateTime)r["ModifiedDate"]
         //            };
 
@@ -229,7 +225,7 @@ namespace SimpleTalkMongoDb.Loaders
 
 
         //    });
-        //    File.WriteAllText(@"C:\tmp\Sales.json", result.ToJson(ws));
+        //    File.WriteAllText(Path.Combine(Directory.GetCurrentDirectory(), "Sales.json"), result.ToJson(ws));
         //}
     }
 }

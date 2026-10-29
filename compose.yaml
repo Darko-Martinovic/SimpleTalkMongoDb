@@ -1,0 +1,15 @@
+# MongoDB for the examples: a single-node replica set (transactions and change streams
+# need one) with Atlas Search and Vector Search, on port 27017 unless MONGO_PORT says otherwise.
+#   podman compose up -d    (or: docker compose up -d)
+services:
+  mongodb:
+    image: mongodb/mongodb-atlas-local:8.0
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+
+volumes:
+  mongodb-data:
+  mongodb-config:

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,15 +11,15 @@ namespace SimpleTalkMongoDb.Pocos
     public class Items
     {
         public ObjectId Id { get; set; }
-        public string Item;
-        public List<Instock> Details { get; set; }
+        public string Item = "";
+        public List<Instock> Details { get; set; } = new();
     }
 
     public class InStockHelper
     {
 
-        public Instock Details { get; set; }
-        public string Item { get; set; }
+        public Instock Details { get; set; } = null!;
+        public string Item { get; set; } = "";
 
 
 
@@ -31,13 +31,13 @@ namespace SimpleTalkMongoDb.Pocos
             WareHouse = wWare;
             Qty = qty;
         }
-        public string WareHouse { get; set; }
+        public string WareHouse { get; set; } = "";
         public int Qty { get; set; }
     }
 
     public class Tester
     {
         public int Id { get; set; }
-        public object Item { get; set; }
+        public object? Item { get; set; }
     }
 }

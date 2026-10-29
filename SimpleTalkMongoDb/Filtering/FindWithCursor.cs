@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
 using System;
@@ -12,11 +12,7 @@ namespace SimpleTalkMongoDb.Filtering
         private const int TotalConst = 5;
         private const int BatchSizeConst = 2;
 
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         /// <summary>
         /// 
@@ -63,7 +59,7 @@ namespace SimpleTalkMongoDb.Filtering
 
             };
             var batchNo = 0;
-            using (var cursor = collection.Find(
+            using var cursor = await collection.Find(
                     x => x.TerritoryId == 1 &&
                          x.SalesPersonId == 283 &&
                          x.TotalDue > 90000
@@ -71,15 +67,12 @@ namespace SimpleTalkMongoDb.Filtering
                 .Limit(TotalConst)
                 .SortBy(x => x.DueDate)
                 .Project(x => new { x.SalesOrderId, x.DueDate, x.AccountNumber })
-                .ToCursorAsync())
-
-
-
-                while (await cursor.Result.MoveNextAsync())
+                .ToCursorAsync();
+            while (await cursor.MoveNextAsync())
                 {
                     ConsoleEx.WriteLine($"Batch no: {++batchNo}", ConsoleColor.Red);
                     Console.WriteLine("-------------------------------------------");
-                    foreach (var doc in cursor.Result.Current)
+                    foreach (var doc in cursor.Current)
                     {
                         ConsoleEx.WriteLine(
                             $"\tSalesHeaderId :{doc.SalesOrderId}  DueDate       :{doc.DueDate.ToLocalTime()}  AccountNumber :{doc.AccountNumber}",

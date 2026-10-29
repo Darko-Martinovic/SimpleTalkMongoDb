@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -12,7 +12,7 @@ namespace SimpleTalkMongoDb.Pocos
         public int SalesOrderId { get; set; }
         // String type decorated by BsonElement Attribute
         [BsonElement("description", Order = 1)]
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
         // DateTime type decorate with DateOnly attribute
         [BsonDateTimeOptions(DateOnly = true)]
         public DateTime OnlyDate { get; set; }
@@ -34,7 +34,7 @@ namespace SimpleTalkMongoDb.Pocos
         // Int type
         public int SalesOrderId { get; set; }
         // String type
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
         // DateTime 
         public DateTime OnlyDate { get; set; }
         // DateTime 

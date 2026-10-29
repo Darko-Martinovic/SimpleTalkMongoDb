@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 
 using SimpleTalkMongoDb.Configuration;
 using SimpleTalkMongoDb.Pocos;
@@ -10,33 +10,29 @@ namespace SimpleTalkMongoDb.CRUD_operations
 {
     internal static class CrudDemo
     {
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         /// <summary>
-        /// Performs various CRUD operaton on 'spetialOffer' collection
+        /// Performs various CRUD operaton on 'specialOffer' collection
         /// NOTE:'R' part in CRUD acronym has also an example in 'Filtering' folder
         /// </summary>
         /// <returns></returns>
         private static async Task MainAsync()
         {
 
-            await InsertOne(SampleConfig.CollSpetialOffer);
-            await InsertManyDemo(SampleConfig.CollSpetialOffer);
+            await InsertOne(SampleConfig.CollSpecialOffer);
+            await InsertManyDemo(SampleConfig.CollSpecialOffer);
             //only works on V4.X and with replica sets
-            //await InsertOneWithTransaction(SampleConfig.CollSpetialOffer);
+            //await InsertOneWithTransaction(SampleConfig.CollSpecialOffer);
 
 
-            await ReplaceOneDemo(SampleConfig.CollSpetialOffer);
-            await UpdateOneDemo(SampleConfig.CollSpetialOffer);
-            await ReplaceUpsertDemo(SampleConfig.CollSpetialOffer);
+            await ReplaceOneDemo(SampleConfig.CollSpecialOffer);
+            await UpdateOneDemo(SampleConfig.CollSpecialOffer);
+            await ReplaceUpsertDemo(SampleConfig.CollSpecialOffer);
 
 
-            await DeleteOne(SampleConfig.CollSpetialOffer);
-            await DeleteManyDemo(SampleConfig.CollSpetialOffer);
+            await DeleteOne(SampleConfig.CollSpecialOffer);
+            await DeleteManyDemo(SampleConfig.CollSpecialOffer);
         }
 
 
@@ -46,11 +42,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static async Task InsertOne(IMongoCollection<SpetialOffer> collection)
+        private static async Task InsertOne(IMongoCollection<SpecialOffer> collection)
         {
 
 
-            var so = new SpetialOffer
+            var so = new SpecialOffer
             {
                 SpecialOfferId = IdToAdd,
                 Description = "Test inserting one",
@@ -68,11 +64,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
             ConsoleEx.WriteLine("------------------------");
             var result = await collection.Find(x => x.SpecialOfferId == IdToAdd).ToListAsync();
 
-            // to find in mongo shell execute db.spetialOffer.find({ _id: 20})
-            // to delete using mongo shell execute db.spetialOffer.remove({_id:20})
+            // to find in mongo shell execute db.specialOffer.find({ _id: 20})
+            // to delete using mongo shell execute db.specialOffer.remove({_id:20})
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}");
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -83,20 +79,20 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// <summary>
         /// Demo:Inserting multiple documents
         /// </summary>
-        /// <param name="collSpetialOffer"></param>
+        /// <param name="collSpecialOffer"></param>
         /// <returns></returns>
-        private static async Task InsertManyDemo(IMongoCollection<SpetialOffer> collSpetialOffer)
+        private static async Task InsertManyDemo(IMongoCollection<SpecialOffer> collSpecialOffer)
         {
             var so = new[]
             {
-                new SpetialOffer
+                new SpecialOffer
                 {
                     SpecialOfferId = IdToAddMany,
                     Description = "Test inserting many 1",
                     Type = "New Product",
                     Category = "Reseller"
                 },
-                new SpetialOffer
+                new SpecialOffer
                 {
                 SpecialOfferId = IdToAddMany2,
                 Description = "Test inserting many 2",
@@ -110,7 +106,7 @@ namespace SimpleTalkMongoDb.CRUD_operations
                 IsOrdered = false
             };
 
-            await collSpetialOffer.InsertManyAsync(so, imo);
+            await collSpecialOffer.InsertManyAsync(so, imo);
 
 
 
@@ -118,12 +114,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
             ConsoleEx.WriteLine("Inserting many documents ", ConsoleColor.Red);
             ConsoleEx.WriteLine("------------------------");
 
-            var result = await collSpetialOffer.Find(x => x.SpecialOfferId >= IdToAddMany).ToListAsync();
-            // to find in mongo shell execute  db.spetialOffer.find({_id:{$gte:30}})
-            // to delete using mongo shell execute db.spetialOffer.remove({_id:{$gte:30}})
+            var result = await collSpecialOffer.Find(x => x.SpecialOfferId >= IdToAddMany).ToListAsync();
+            // to find in mongo shell execute  db.specialOffer.find({_id:{$gte:30}})
+            // to delete using mongo shell execute db.specialOffer.remove({_id:{$gte:30}})
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -137,11 +133,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// <param name="collection"></param>
         /// <returns></returns>
         // ReSharper disable once UnusedMember.Local
-        private static async Task InsertOneWithTransaction(IMongoCollection<SpetialOffer> collection)
+        private static async Task InsertOneWithTransaction(IMongoCollection<SpecialOffer> collection)
         {
 
 
-            var so = new SpetialOffer
+            var so = new SpecialOffer
             {
                 SpecialOfferId = IdToAdd,
                 Description = "Test inserting one",
@@ -180,11 +176,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
             ConsoleEx.WriteLine("------------------------");
             var result = await collection.Find(x => x.SpecialOfferId == IdToAdd).ToListAsync();
 
-            // to find in mongo shell execute db.spetialOffer.find({ _id: 20})
-            // to delete using mongo shell execute db.spetialOffer.remove({_id:20})
+            // to find in mongo shell execute db.specialOffer.find({ _id: 20})
+            // to delete using mongo shell execute db.specialOffer.remove({_id:20})
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}");
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -200,12 +196,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static async Task ReplaceOneDemo(IMongoCollection<SpetialOffer> collection)
+        private static async Task ReplaceOneDemo(IMongoCollection<SpecialOffer> collection)
         {
 
             // It is not possible to change ID !!!
             // if we specify the condition that has no matching document default behavior is to do nothing!
-            var so = new SpetialOffer
+            var so = new SpecialOffer
             {
                 SpecialOfferId = IdToAdd,
                 Description = "NEW DESCRIPTION",
@@ -231,12 +227,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
 
 
             var result = await collection.Find(x => x.SpecialOfferId == IdToAdd).ToListAsync();
-            // to find in mongo shell execute db.spetialOffer.find({ _id: 20})
-            // to delete using mongo shell execute db.spetialOffer.remove({_id:20})
+            // to find in mongo shell execute db.specialOffer.find({ _id: 20})
+            // to delete using mongo shell execute db.specialOffer.remove({_id:20})
             ConsoleEx.WriteLine("Description should be now : " + so.Description, ConsoleColor.Cyan);
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -250,11 +246,11 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static async Task UpdateOneDemo(IMongoCollection<SpetialOffer> collection)
+        private static async Task UpdateOneDemo(IMongoCollection<SpecialOffer> collection)
         {
 
 
-            var ud = Builders<SpetialOffer>.Update.Set("Description", "Descripton from update");
+            var ud = Builders<SpecialOffer>.Update.Set("Description", "Descripton from update");
             var resultOfUpdate = await collection.UpdateOneAsync(x => x.SpecialOfferId == IdToAdd, ud);
 
             ConsoleEx.WriteLine("Update one document ", ConsoleColor.Red);
@@ -273,7 +269,7 @@ namespace SimpleTalkMongoDb.CRUD_operations
             ConsoleEx.WriteLine("Description should be now : 'Descripton from update'", ConsoleColor.Cyan);
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -287,18 +283,18 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
-        private static async Task ReplaceUpsertDemo(IMongoCollection<SpetialOffer> collection)
+        private static async Task ReplaceUpsertDemo(IMongoCollection<SpecialOffer> collection)
         {
 
             // if we specify the condition that has no matching document default behavior is to do nothing!
-            var so = new SpetialOffer
+            var so = new SpecialOffer
             {
                 SpecialOfferId = IdToUpsert,
                 Description = "Upsert demo",
                 Type = "Upsert type",
                 Category = "Upsert Category"
             };
-            await collection.ReplaceOneAsync(x => x.SpecialOfferId == IdToUpsert, so, new UpdateOptions
+            await collection.ReplaceOneAsync(x => x.SpecialOfferId == IdToUpsert, so, new ReplaceOptions
             {
                 IsUpsert = true
             });
@@ -306,12 +302,12 @@ namespace SimpleTalkMongoDb.CRUD_operations
             ConsoleEx.WriteLine("Update/upsert document ", ConsoleColor.Red);
             ConsoleEx.WriteLine("------------------------");
             var result = await collection.Find(x => x.SpecialOfferId == IdToUpsert).ToListAsync();
-            // to find in mongo shell execute db.spetialOffer.find({ _id: 20})
-            // to delete using mongo shell execute db.spetialOffer.remove({_id:20})
+            // to find in mongo shell execute db.specialOffer.find({ _id: 20})
+            // to delete using mongo shell execute db.specialOffer.remove({_id:20})
             ConsoleEx.WriteLine("We are now upserting : " + so.Description, ConsoleColor.Cyan);
             foreach (var doc in result)
             {
-                ConsoleEx.WriteLine($"SpetialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
+                ConsoleEx.WriteLine($"SpecialOfferId {doc.SpecialOfferId}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Description    {doc.Description}", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Type           {doc.Type} ", ConsoleColor.Yellow);
                 ConsoleEx.WriteLine($"Category       {doc.Category}");
@@ -324,14 +320,14 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// <summary>
         /// Demo:Delete one document
         /// </summary>
-        /// <param name="collSpetialOffer"></param>
+        /// <param name="collSpecialOffer"></param>
         /// <returns></returns>
-        private static async Task DeleteOne(IMongoCollection<SpetialOffer> collSpetialOffer)
+        private static async Task DeleteOne(IMongoCollection<SpecialOffer> collSpecialOffer)
         {
             Console.WriteLine();
-            ConsoleEx.WriteLine($"Deleting document SpetialOfferId = {IdToAdd}", ConsoleColor.Red);
+            ConsoleEx.WriteLine($"Deleting document SpecialOfferId = {IdToAdd}", ConsoleColor.Red);
             Console.WriteLine();
-            var result = await collSpetialOffer.DeleteOneAsync(x => x.SpecialOfferId == IdToAdd);
+            var result = await collSpecialOffer.DeleteOneAsync(x => x.SpecialOfferId == IdToAdd);
             Console.WriteLine($"Is deleted completed : {result.IsAcknowledged}");
         }
 
@@ -339,14 +335,14 @@ namespace SimpleTalkMongoDb.CRUD_operations
         /// <summary>
         /// Demo: Delete multiple documents
         /// </summary>
-        /// <param name="collSpetialOffer"></param>
+        /// <param name="collSpecialOffer"></param>
         /// <returns></returns>
-        private static async Task DeleteManyDemo(IMongoCollection<SpetialOffer> collSpetialOffer)
+        private static async Task DeleteManyDemo(IMongoCollection<SpecialOffer> collSpecialOffer)
         {
             Console.WriteLine();
-            ConsoleEx.WriteLine($"Deleting documents SpetialOfferId >= {IdToAddMany}", ConsoleColor.Red);
+            ConsoleEx.WriteLine($"Deleting documents SpecialOfferId >= {IdToAddMany}", ConsoleColor.Red);
             Console.WriteLine();
-            var result = await collSpetialOffer.DeleteManyAsync(x => x.SpecialOfferId >= IdToAddMany);
+            var result = await collSpecialOffer.DeleteManyAsync(x => x.SpecialOfferId >= IdToAddMany);
             Console.WriteLine($"Is deleted completed : {result.IsAcknowledged} .The number of deleted records : {result.DeletedCount}");
         }
 

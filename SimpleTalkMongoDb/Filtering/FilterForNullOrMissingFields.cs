@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 using MongoDB.Bson;
@@ -14,11 +14,7 @@ namespace SimpleTalkMongoDb.Filtering
         // Query for Null or Missing Fields. Based on MongoDB example 
         // https://docs.mongodb.com/manual/tutorial/query-for-null-fields/
         // Use BsonNull.Value with the MongoDB C# driver to query for null and C# null ( VB.NET Nothing ) for missing fields in MongoDB.
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         private static async Task MainAsync()
         {
@@ -44,7 +40,7 @@ namespace SimpleTalkMongoDb.Filtering
 
         private static async Task UsingIFindFluent(IMongoCollection<Tester> collItems)
         {
-            var list = await (collItems.Find(x => x.Item.Equals(BsonNull.Value))).ToListAsync();
+            var list = await (collItems.Find(x => x.Item!.Equals(BsonNull.Value))).ToListAsync();
 
             ConsoleEx.WriteLine("Using IFindFluent", ConsoleColor.DarkYellow);
             Console.WriteLine();
@@ -61,7 +57,7 @@ namespace SimpleTalkMongoDb.Filtering
 
         private static async Task UsingLinq(IMongoCollection<Tester> collItems)
         {
-            var list = await (collItems.AsQueryable().Where(x => x.Item.Equals(BsonNull.Value))).ToListAsync();
+            var list = await (collItems.AsQueryable().Where(x => x.Item!.Equals(BsonNull.Value))).ToListAsync();
 
             ConsoleEx.WriteLine("Using MongoDB Linq", ConsoleColor.DarkYellow);
             Console.WriteLine();
