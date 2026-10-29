@@ -9,7 +9,8 @@ namespace SimpleTalkMongoDb.Modern
     /// <summary>
     /// MongoDB 5.0: a time series collection stores measurements (a time, a metadata field and
     /// values) in buckets per metadata value and time span, compressed, while the collection still
-    /// reads like any other. MongoDB 6.0 added secondary indexes on the measurements.
+    /// reads like any other. MongoDB 6.0 added secondary indexes on the measurements' values, and
+    /// 6.3 an automatic index on the metadata field and the time.
     /// </summary>
     internal static class TimeSeries
     {
@@ -34,9 +35,9 @@ namespace SimpleTalkMongoDb.Modern
                 .ToListAsync();
             await measurements.InsertManyAsync(orders);
 
-            // 6.0: a secondary index on the metadata and the time
+            // 6.0: a secondary index on a measurement's value
             await measurements.Indexes.CreateOneAsync(new CreateIndexModel<SalesMeasurement>(
-                Builders<SalesMeasurement>.IndexKeys.Ascending(x => x.TerritoryId).Ascending(x => x.OrderDate)));
+                Builders<SalesMeasurement>.IndexKeys.Descending(x => x.TotalDue)));
 
             ConsoleEx.WriteLine("A time series collection (MongoDB 5.0)", ConsoleColor.Magenta);
             var info = await (await db.ListCollectionsAsync(new ListCollectionsOptions
@@ -49,6 +50,10 @@ namespace SimpleTalkMongoDb.Modern
             var buckets = await db.GetCollection<BsonDocument>($"system.buckets.{CollectionName}")
                 .CountDocumentsAsync(FilterDefinition<BsonDocument>.Empty);
             ConsoleEx.WriteLine($"{orders.Count} measurements are stored in {buckets} buckets", ConsoleColor.Cyan);
+
+            // The index MongoDB created on the metadata and the time (6.3), and ours on TotalDue
+            var indexes = await (await measurements.Indexes.ListAsync()).ToListAsync();
+            ConsoleEx.WriteLine($"Indexes: {string.Join(", ", indexes.Select(i => $"{i["name"]} {i["key"]}"))}", ConsoleColor.Cyan);
             Console.WriteLine();
 
             // Queried like any collection: monthly sales of territory 1 in the first half of 2014

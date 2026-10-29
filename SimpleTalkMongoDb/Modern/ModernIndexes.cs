@@ -90,7 +90,9 @@ namespace SimpleTalkMongoDb.Modern
                 { "explain", new BsonDocument { { "find", CollectionName }, { "filter", filter } } },
                 { "verbosity", "executionStats" }
             });
-            var plan = explain["queryPlanner"]["winningPlan"].AsBsonDocument;
+            // The slot-based engine wraps the plan in queryPlan; the classic engine doesn't
+            var winning = explain["queryPlanner"]["winningPlan"].AsBsonDocument;
+            var plan = winning.Contains("queryPlan") ? winning["queryPlan"].AsBsonDocument : winning;
             var stats = explain["executionStats"];
             ConsoleEx.WriteLine(
                 $"{title,-42} {Stages(plan),-30} {IndexName(plan),-28} examined {stats["totalDocsExamined"],6}, returned {stats["nReturned"],5}",
