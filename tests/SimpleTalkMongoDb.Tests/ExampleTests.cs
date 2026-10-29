@@ -17,7 +17,17 @@ public sealed class MongoFixture : IAsyncLifetime
 
     public async ValueTask InitializeAsync()
     {
-        await _mongo.StartAsync();
+        try
+        {
+            await _mongo.StartAsync();
+        }
+        catch (Exception e)
+        {
+            // Show why MongoDB didn't start, not only that it didn't
+            var (stdout, stderr) = await _mongo.GetLogsAsync();
+            throw new InvalidOperationException($"MongoDB didn't start:\n{stdout}\n{stderr}", e);
+        }
+
         var seed = await App.RunAsync("seed", ConnectionString);
         Assert.True(seed.ExitCode == 0, seed.Output);
     }
