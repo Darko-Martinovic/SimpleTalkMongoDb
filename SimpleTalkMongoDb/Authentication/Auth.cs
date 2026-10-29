@@ -22,18 +22,21 @@ namespace SimpleTalkMongoDb.Authentication
             var credential =
                 MongoCredential.CreateCredential(databaseName: Dbase, username: UserName, password: Password);
 
-            var settings = new MongoClientSettings
-            {
-                Server = Server,
-                DirectConnection = DirectConnection,
-                Credential = credential
-            };
+            // The configured connection's settings (server, TLS and so on) with the sample user's credential
+            var settings = MongoClientSettings.FromConnectionString(SampleConfig.MongoConnectionString);
+            settings.Credential = credential;
             var mongoClient = new MongoClient(settings);
             var db = mongoClient.GetDatabase($"{Dbase}");
             var numberOfDocuments = await db.GetCollection<SalesHeader>($"{Collection}")
                 .CountDocumentsAsync(new BsonDocument());
             //Using connectionString
-            var connectionString = $"mongodb://{UserName}:{Password}@{Server}/{Dbase}?directConnection={DirectConnection.ToString().ToLowerInvariant()}";
+            // MongoUrlBuilder escapes the user name and password, which a URI needs for characters such as '#' or '@'
+            var connectionString = new MongoUrlBuilder(SampleConfig.MongoConnectionString)
+            {
+                Username = UserName,
+                Password = Password,
+                AuthenticationSource = Dbase
+            }.ToString();
 
             mongoClient = new MongoClient(connectionString);
             db = mongoClient.GetDatabase($"{Dbase}");
@@ -49,12 +52,8 @@ namespace SimpleTalkMongoDb.Authentication
                 MongoCredential.CreateCredential(databaseName: Dbase, username: UserName, password: ss);
 
 
-            settings = new MongoClientSettings
-            {
-                Server = Server,
-                DirectConnection = DirectConnection,
-                Credential = credential
-            };
+            settings = MongoClientSettings.FromConnectionString(SampleConfig.MongoConnectionString);
+            settings.Credential = credential;
 
             mongoClient = new MongoClient(settings);
 
@@ -64,7 +63,7 @@ namespace SimpleTalkMongoDb.Authentication
             var numberOfDocuments3 = await db.GetCollection<SalesHeader>($"{Collection}")
                 .CountDocumentsAsync(new BsonDocument());
 
-            ConsoleEx.WriteLine("In order to prove that we are successfully connected, let's count the number of documents in the 'adventureWorks2016' collection.", ConsoleColor.Cyan);
+            ConsoleEx.WriteLine($"In order to prove that we are successfully connected, let's count the number of documents in the '{Collection}' collection.", ConsoleColor.Cyan);
             ConsoleEx.WriteLine($"Number of documents : {numberOfDocuments}/{numberOfDocument2}/{numberOfDocuments3}", ConsoleColor.Yellow);
             ConsoleEx.WriteLine($"I did not find useful commands in the mongo shell to display active connections.", ConsoleColor.Red);
             ConsoleEx.WriteLine("'db.serverStatus().connections' will help, but in the resulting document, there is no detailed information about connections");
@@ -73,13 +72,11 @@ namespace SimpleTalkMongoDb.Authentication
 
         #region Constants
 
-        // The user the seed command creates, and the server from the configured connection string
+        // The user the seed command creates in the configured database, and the collection it counts
         private static readonly string UserName = SampleConfig.Settings["SampleUser"]!;
         private static readonly string Password = SampleConfig.Settings["SamplePassword"]!;
-        private static readonly MongoServerAddress Server = MongoUrl.Create(SampleConfig.MongoConnectionString).Server;
-        private static readonly bool DirectConnection = MongoUrl.Create(SampleConfig.MongoConnectionString).DirectConnection;
-        private const string Dbase = "simpleTalk";
-        private const string Collection = "adventureWorks2016";
+        private static readonly string Dbase = SampleConfig.Db.DatabaseNamespace.DatabaseName;
+        private static readonly string Collection = SampleConfig.Collection.CollectionNamespace.CollectionName;
 
 
         #endregion

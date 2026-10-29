@@ -72,7 +72,8 @@ namespace SimpleTalkMongoDb.Seed
             catch (MongoCommandException e)
             {
                 // A server with access control needs a user allowed to create users
-                ConsoleEx.WriteLine($"Couldn't create user '{user}': {e.ErrorMessage}", ConsoleColor.Red);
+                throw new InvalidOperationException(
+                    $"The data is loaded, but user '{user}', which the auth example needs, couldn't be created: {e.ErrorMessage}", e);
             }
         }
     }
