@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace SimpleTalkMongoDb.Pocos
 {
@@ -8,15 +8,15 @@ namespace SimpleTalkMongoDb.Pocos
         public int ProductId { get; set; }
 
         [BsonElement("productNumber")]
-        public string ProductNumber { get; set; }
+        public string? ProductNumber { get; set; }
 
         [BsonElement("productName")]
-        public string ProductName { get; set; }
+        public string ProductName { get; set; } = "";
 
         [BsonElement("subCategory")]
-        public string SubCategoryName { get; set; }
+        public string SubCategoryName { get; set; } = "";
 
         [BsonElement("category")]
-        public string Category { get; set; }
+        public string Category { get; set; } = "";
     }
 }

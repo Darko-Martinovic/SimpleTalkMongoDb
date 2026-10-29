@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using System;
 using MongoDB.Bson.IO;
@@ -8,13 +8,12 @@ using SimpleTalkMongoDb.Pocos;
 
 namespace SimpleTalkMongoDb.Serialization
 {
-    internal static class AtributteDecoration
+    internal static class AttributeDecoration
     {
-        public static void Main(string[] args)
+        public static Task RunAsync()
         {
             Worker();
-            Console.WriteLine("Press any key to exit!");
-            Console.ReadLine();
+            return Task.CompletedTask;
         }
 
         private static void Worker()

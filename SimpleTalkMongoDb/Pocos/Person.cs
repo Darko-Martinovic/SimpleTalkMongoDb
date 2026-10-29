@@ -1,17 +1,17 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using System.Collections.Generic;
 
 namespace SimpleTalkMongoDb.Pocos
 {
     public class Person
     {
-        public string FirstName;
+        public string FirstName = "";
     }
     public class NameMeaning
     {
         public ObjectId Id { get; set; }
-        public string Name;
-        public string Definition;
+        public string Name = "";
+        public string Definition = "";
 
 
     }
@@ -22,9 +22,9 @@ namespace SimpleTalkMongoDb.Pocos
 
         public ObjectId Id { get; set; }
 
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = "";
 
-        public IEnumerable<NameMeaning> Meanings { get; set; }
+        public IEnumerable<NameMeaning> Meanings { get; set; } = [];
     }
    
 }

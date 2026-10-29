@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
 using System.Collections.Generic;
 
@@ -14,8 +14,8 @@ namespace CreateMongoJson.Pocos
     public class Book
     {
         public decimal Price;
-        public string Title;
-        public string Author;
+        public string Title = "";
+        public string Author = "";
     }
 
 
@@ -26,7 +26,7 @@ namespace CreateMongoJson.Pocos
     {
         public int MySimpleInt { get; set; }
 
-        public IEnumerable<Book> MyBooks { get; set; }
+        public IEnumerable<Book>? MyBooks { get; set; }
     }
 
     /// <summary>
@@ -37,16 +37,16 @@ namespace CreateMongoJson.Pocos
 
         public int Id { get; set; }
 
+        // Left null when not set, so the example shows how null collections serialize
+        public Queue<int>? MongoQueue { get; set; }
 
-        public Queue<int> MongoQueue { get; set; }
-
-        public Stack<string> MongoStack { get; set; }
+        public Stack<string>? MongoStack { get; set; }
 
 
-        public List<long> MongoList { get; set; }
+        public List<long>? MongoList { get; set; }
 
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
-        public Dictionary<string, int> MongoDictonary { get; set; }
+        public Dictionary<string, int>? MongoDictonary { get; set; }
 
 
         public MyEnum MongoEnum { get; set; }

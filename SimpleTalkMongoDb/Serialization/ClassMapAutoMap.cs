@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
@@ -9,11 +9,10 @@ namespace SimpleTalkMongoDb.Serialization
 {
     internal static class ClassMapAutoMap
     {
-        public static void Main(string[] args)
+        public static Task RunAsync()
         {
             Worker();
-            Console.WriteLine("Press any key to exit!");
-            Console.ReadLine();
+            return Task.CompletedTask;
         }
 
 

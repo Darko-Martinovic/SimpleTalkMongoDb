@@ -1,4 +1,4 @@
-﻿using MongoDB.Driver;
+using MongoDB.Driver;
 
 using System;
 using System.Threading.Tasks;
@@ -11,11 +11,7 @@ namespace SimpleTalkMongoDb.Aggregation
     {
 
 
-        public static void Main()
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
       
         private static async Task MainAsync()

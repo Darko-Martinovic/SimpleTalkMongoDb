@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
@@ -12,11 +12,7 @@ namespace SimpleTalkMongoDb.Filtering
         // Query on Embedded/Nested Documents. Based on MongoDB example 
         // https://docs.mongodb.com/manual/tutorial/query-embedded-documents/
         //  An example of query operations on embedded/nested documents using the MongoCollection.Find()
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         private static async Task MainAsync()
         {

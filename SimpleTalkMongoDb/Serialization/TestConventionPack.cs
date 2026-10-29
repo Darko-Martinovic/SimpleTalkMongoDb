@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
@@ -12,13 +12,10 @@ namespace SimpleTalkMongoDb.Serialization
 {
     internal static class TestConventionPack
     {
-        public static void Main(string[] args)
+        public static Task RunAsync()
         {
-           
             Worker();
-           
-            Console.WriteLine("Press any key to exit!");
-            Console.ReadLine();
+            return Task.CompletedTask;
         }
 
         private static void Worker()

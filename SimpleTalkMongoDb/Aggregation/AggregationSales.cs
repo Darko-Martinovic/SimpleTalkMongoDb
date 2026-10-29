@@ -1,4 +1,4 @@
-﻿using MongoDB.Bson;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -17,12 +17,7 @@ namespace SimpleTalkMongoDb.Aggregation
         /// <summary>
         /// The example shows various way of aggregation.
         /// </summary>
-        // ReSharper disable once UnusedMember.Global
-        public static void Main()
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
 
         /// <summary>
@@ -257,7 +252,7 @@ namespace SimpleTalkMongoDb.Aggregation
             foreach (var example in matchingExamples)
             {
                 ConsoleEx.WriteLine(
-                    $"{example.GetElement("TerritoryId").Value.ToString().PadRight(TerId.Length)} {example.GetElement("Customer").Value.ToString().PadRight(MaxCustoId.Length)} " +
+                    $"{$"{example.GetElement("TerritoryId").Value}".PadRight(TerId.Length)} {$"{example.GetElement("Customer").Value}".PadRight(MaxCustoId.Length)} " +
                     $"{((decimal)example.GetElement("Total").Value):N2}", ConsoleColor.Yellow);
             }
 

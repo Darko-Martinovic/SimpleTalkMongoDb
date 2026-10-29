@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -13,11 +13,7 @@ namespace SimpleTalkMongoDb.Filtering
         // Query for a Document Nested in an Array. Based on MongoDB example 
         // https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
         // Find documents that have WareHouse equal to A and the quantity equal 5
-        public static void Main(string[] args)
-        {
-            MainAsync().Wait();
-            Console.ReadLine();
-        }
+        public static Task RunAsync() => MainAsync();
 
         private static async Task MainAsync()
         {

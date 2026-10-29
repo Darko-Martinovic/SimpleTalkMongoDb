@@ -1,0 +1,20 @@
+name: build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  build:
+    # MongoDB 8 refuses to start on Linux kernels 6.19 to 7.0.13 (SERVER-121912),
+    # which ubuntu-latest runs; ubuntu-22.04 is on 6.8
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet build SimpleTalkMongoDb.slnx
+      # The tests start MongoDB in a container with Testcontainers
+      - run: dotnet test --solution SimpleTalkMongoDb.slnx --no-build
