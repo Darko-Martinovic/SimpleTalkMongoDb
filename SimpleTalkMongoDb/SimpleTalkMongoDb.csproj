@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.14" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.14" />
     <PackageReference Include="MongoDB.Driver" Version="3.13.0" />
+    <PackageReference Include="MongoDB.EntityFrameworkCore" Version="10.0.4" />
     <PackageReference Include="Spectre.Console" Version="0.57.2" />
     <!-- Microsoft.Data.SqlClient brings in an older Pkcs with a known vulnerability -->
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
