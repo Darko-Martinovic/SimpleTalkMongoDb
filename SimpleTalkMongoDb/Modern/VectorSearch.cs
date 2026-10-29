@@ -25,11 +25,13 @@ namespace SimpleTalkMongoDb.Modern
             var file = JsonSerializer.Deserialize<EmbeddingsFile>(
                 await File.ReadAllTextAsync(Path.Combine(AppContext.BaseDirectory, "Data", "ProductEmbeddings.json")))!;
 
-            // The products with their vectors, in a collection of their own
+            // The products with their vectors, in a collection of their own. Dropping it drops its
+            // index too, so the wait below covers a build over these documents; an index left in place
+            // would take in a delete and reinsert in the background, and could answer half-empty
+            await SampleConfig.Db.DropCollectionAsync(CollectionName);
             var vectors = SampleConfig.Db.GetCollection<ProductVector>(CollectionName);
             var embeddings = file.Products.ToDictionary(e => e.ProductId, e => e.Embedding);
             var products = await SampleConfig.CollProducts.Find(FilterDefinition<Product>.Empty).ToListAsync();
-            await vectors.DeleteManyAsync(FilterDefinition<ProductVector>.Empty);
             await vectors.InsertManyAsync(products.Select(p => new ProductVector
             {
                 ProductId = p.ProductId,

@@ -15,27 +15,21 @@ namespace SimpleTalkMongoDb.Modern
         /// <summary>Creates the index unless it exists, and waits until it can be queried.</summary>
         public static async Task EnsureAsync<T>(IMongoCollection<T> collection, string name, SearchIndexType type, BsonDocument definition)
         {
-            try
+            var waited = System.Diagnostics.Stopwatch.StartNew();
+            var created = false;
+            while (true)
             {
-                var existing = await (await collection.SearchIndexes.ListAsync(name)).ToListAsync();
-                if (existing.Count == 0)
+                var index = await FindAsync(collection, name);
+                var status = index?.GetValue("status", "").ToString();
+
+                if (index is null && !created)
                 {
                     ConsoleEx.WriteLine($"Creating {type} index '{name}' on '{collection.CollectionNamespace.CollectionName}'...", ConsoleColor.Cyan);
                     await collection.SearchIndexes.CreateOneAsync(new CreateSearchIndexModel(name, type, definition));
+                    created = true;
                 }
-            }
-            catch (MongoCommandException e)
-            {
-                throw new InvalidOperationException(
-                    "Atlas Search and Vector Search need MongoDB Atlas or the mongodb-atlas-local container " +
-                    $"(compose.yaml); this MongoDB has no search process. ({e.CodeName}: {e.ErrorMessage})", e);
-            }
-
-            var waited = System.Diagnostics.Stopwatch.StartNew();
-            while (true)
-            {
-                var index = (await (await collection.SearchIndexes.ListAsync(name)).ToListAsync()).Single();
-                if (index.GetValue("queryable", false).ToBoolean())
+                // An index of a dropped collection lingers as DELETING for a moment; wait it out
+                else if (index is not null && status != "DELETING" && index.GetValue("queryable", false).ToBoolean())
                 {
                     return;
                 }
@@ -46,6 +40,22 @@ namespace SimpleTalkMongoDb.Modern
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(1));
+            }
+        }
+
+        private static async Task<BsonDocument?> FindAsync<T>(IMongoCollection<T> collection, string name)
+        {
+            try
+            {
+                return (await (await collection.SearchIndexes.ListAsync(name)).ToListAsync()).SingleOrDefault();
+            }
+            catch (MongoCommandException e) when (e.CodeName == "SearchNotEnabled")
+            {
+                // Only a server without search says this; other errors (permissions, a rejected
+                // definition) keep the server's own explanation
+                throw new InvalidOperationException(
+                    "Atlas Search and Vector Search need MongoDB Atlas or the mongodb-atlas-local container " +
+                    $"(compose.yaml); this MongoDB has no search process. ({e.CodeName}: {e.ErrorMessage})", e);
             }
         }
     }
