@@ -18,8 +18,10 @@ namespace SimpleTalkMongoDb.Examples
     /// </summary>
     public static class ExampleCatalog
     {
-        public const string LoadersCategory = "Loaders (need SQL Server with AdventureWorks2016)";
+        public const string LoadersCategory = "Loaders (rebuild the data files; SQL Server or Ollama)";
         public const string ModernCategory = "Modern MongoDB (any MongoDB 8)";
+        public const string ReplicaSetCategory = "Modern MongoDB (needs a replica set)";
+        public const string AtlasCategory = "Modern MongoDB (needs Atlas or atlas-local)";
 
         public static IReadOnlyList<Example> All { get; } =
         [
@@ -56,10 +58,18 @@ namespace SimpleTalkMongoDb.Examples
             new("modern-indexes", ModernCategory, "Wildcard, hidden, compound wildcard, partial and TTL indexes, clustered collections", ModernIndexes.RunAsync),
             new("stable-api", ModernCategory, "The Stable API, strict (5.0)", StableApi.RunAsync),
             new("client-bulk-write", ModernCategory, "One bulk write across collections (8.0)", ClientBulkWrite.RunAsync),
+            new("ef-core", ModernCategory, "CRUD through Entity Framework Core and the MongoDB provider", EfCoreProvider.RunAsync),
+
+            new("transactions", ReplicaSetCategory, "Multi-document transactions with WithTransactionAsync (4.0)", Transactions.RunAsync),
+            new("change-streams", ReplicaSetCategory, "Change streams (3.6) with pre-images (6.0) and resuming", ChangeStreams.RunAsync),
+
+            new("atlas-search", AtlasCategory, "Full-text search: fuzzy, autocomplete and compound queries with scores", AtlasSearch.RunAsync),
+            new("vector-search", AtlasCategory, "Search by meaning with $vectorSearch over embeddings", VectorSearch.RunAsync),
 
             new("create-json-products", LoadersCategory, "Writes Product.json from AdventureWorks2016", CreateJsonProducts.RunAsync),
             new("create-json-sales", LoadersCategory, "Writes Sales.json from AdventureWorks2016", CreateJsonSales.RunAsync),
             new("create-json-special-offers", LoadersCategory, "Writes SpecialOffer.json from AdventureWorks2016", CreateJsonSpecialOffer.RunAsync),
+            new("create-json-embeddings", LoadersCategory, "Writes ProductEmbeddings.json with a local Ollama (needs Ollama, not SQL Server)", CreateJsonEmbeddings.RunAsync),
         ];
 
         public static Example? Find(string name) =>
